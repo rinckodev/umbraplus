@@ -1,0 +1,28 @@
+{
+  "name": "rincko-cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "bin": "dist/index.js",
+  "scripts": {
+    "start": "node .",
+    "dev": "ts-node --transpiler sucrase/ts-node-plugin src/index.ts",
+    "build": "rm -rf dist && tsc",
+    "buildalt": "npm unlink rincko-cli && tsc -p . && npm link"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@clack/prompts": "^0.6.3",
+    "args": "^5.0.3",
+    "colors": "^1.4.0",
+    "tslib": "^2.6.1"
+  },
+  "devDependencies": {
+    "@types/args": "^5.0.0",
+    "sucrase": "^3.34.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.6"
+  }
+}
