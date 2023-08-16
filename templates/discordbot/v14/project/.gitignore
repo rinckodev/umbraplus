@@ -1,0 +1,11 @@
+package-lock.json
+node_modules
+dist
+.env
+
+*deprecated
+*.exe
+*.app
+*.config
+*.zip
+*.sqlite

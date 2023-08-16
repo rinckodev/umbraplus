@@ -1,14 +1,15 @@
 {
-  "name": "rincko-cli",
+  "name": "umbra",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/index.js",
-  "bin": "dist/index.js",
+  "main": "dist/main.js",
+  "bin": "dist/main.js",
   "scripts": {
     "start": "node .",
-    "dev": "ts-node --transpiler sucrase/ts-node-plugin src/index.ts",
+    "test": "npm run build && npm run link",
+    "dev": "ts-node --transpiler sucrase/ts-node-plugin ./main.ts",
     "build": "rm -rf dist && tsc",
-    "buildalt": "npm unlink rincko-cli && tsc -p . && npm link"
+    "link": "npm unlink rincko-cli && tsc -p . && npm link"
   },
   "keywords": [],
   "author": "",
@@ -16,11 +17,18 @@
   "dependencies": {
     "@clack/prompts": "^0.6.3",
     "args": "^5.0.3",
-    "colors": "^1.4.0",
-    "tslib": "^2.6.1"
+    "chalk": "^4.1.2",
+    "commander": "^11.0.0",
+    "cross-spawn": "^7.0.3",
+    "fs-extra": "^11.1.1",
+    "tslib": "^2.6.1",
+    "validate-npm-package-name": "^5.0.0"
   },
   "devDependencies": {
     "@types/args": "^5.0.0",
+    "@types/cross-spawn": "^6.0.2",
+    "@types/fs-extra": "^11.0.1",
+    "@types/validate-npm-package-name": "^4.0.0",
     "sucrase": "^3.34.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.1.6"

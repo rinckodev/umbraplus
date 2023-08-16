@@ -1,0 +1,90 @@
+{
+    "en_us":{
+        "main":{
+            "intro": "Welcome to Umbra CLI"
+        },
+        "apps":{
+            "title": "Select the app you want to create",
+            "options": [
+                { "label": "Discord Bot", "value": "discord-bot" },
+                { "label": "Discord Rich Presence", "value": "discord-richpresence", "hint": "Soon" }
+            ],
+            "errors":{
+                "unavailable": "The selected item is currently unavailable"
+            },
+            "discord-bot":{
+                "errors":{
+                    "invalidProjectName": "Invalid project name: ",
+                    "destinationExists": "Destination {destination} already exists."
+                },
+                "projectName":{
+                    "message": "Project name?",
+                    "placeholder": "my-discord-bot",
+                    "defaultValue": "my-discord-bot"
+                },
+                "includeExamples":{
+                    "message": "Add usage examples?",
+                    "defaultValue": true
+                },
+                "installDep":{
+                    "message": "Install dependencies?",
+                    "defaultValue": true
+                },
+                "installDepSpinner":{
+                    "start": "Installing dependencies",
+                    "stop": "Dependencies installed"
+                },
+                "note":{
+                    "title": "Done",
+                    "message": "See project README.md"
+                }
+            }
+        }
+    },
+    "pt_br":{
+        "main":{
+            "intro": "Seja bem vindo à Umbra CLI"
+        },
+        "apps":{
+            "title": "Selecione o app que deseja criar",
+            "options": [
+                { "label": "Bot de discord", "value": "discord-bot" },
+                { "label": "Rich Presence de discord", "value": "discord-richpresence", "hint": "Soon" }
+            ],
+            "errors":{
+                "unavailable": "O item selecionado está indisponível no momento"
+            },
+            "discord-bot":{
+                "errors":{
+                    "invalidProjectName": "Nome do projeto inválido: ",
+                    "destinationExists": "O destino {destination} já existe."
+                },
+                "projectName":{
+                    "message": "Nome do projeto?",
+                    "placeholder": "meu-bot-discord",
+                    "defaultValue": "meu-bot-discord"
+                },
+                "includeExamples":{
+                    "message": "Adicionar exemplos de usos?",
+                    "defaultValue": true,
+                    "active": "Sim",
+                    "inactive": "Não"
+                },
+                "installDep":{
+                    "message": "Instalar dependências?",
+                    "defaultValue": true,
+                    "active": "Sim",
+                    "inactive": "Não"
+                },
+                "installDepSpinner":{
+                    "start": "Instalando dependências",
+                    "stop": "Dependencias instaladas."
+                },
+                "note":{
+                    "title": "Concluído",
+                    "message": "Veja o README.md do projeto"
+                }
+            }
+        }
+    }
+}
