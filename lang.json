@@ -1,7 +1,7 @@
 {
     "en_us":{
         "main":{
-            "intro": "Welcome to Umbra CLI"
+            "intro": "Welcome to Umbra Plus CLI"
         },
         "apps":{
             "title": "Select the app you want to create",
@@ -43,7 +43,7 @@
     },
     "pt_br":{
         "main":{
-            "intro": "Seja bem vindo à Umbra CLI"
+            "intro": "Seja bem vindo à Umbra Plus CLI"
         },
         "apps":{
             "title": "Selecione o app que deseja criar",

@@ -1,16 +1,16 @@
-# Umbra CLI
+# Umbra Plus CLI
 
 Create your own projects using the bases created by [@rinckodev](https://github.com/rinckodev).
 This CLI allows you to start new projects quickly with everything structured and configured. Start using the following command:
 ```bash
-npx umbra
+npx umbraplus
 ```
 
 You can change the language of the program using the --lang flag
 ```bash
-npx umbra --lang pt_br
+npx umbraplus --lang pt_br
 # or
-npx umbra -l pt_br
+npx umbraplus -l pt_br
 ```
 
 Available languages: 
