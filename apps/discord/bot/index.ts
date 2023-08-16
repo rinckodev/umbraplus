@@ -44,9 +44,11 @@ async function bot(props: Props){
     
     const templateProjectPath = join(templatePath, "v14", "project")
     const templateExamplesPath = join(templatePath, "v14", "examples")
+    const templateGitignorePath = join(templatePath, "v14", "gitignore")
     const destinationExamplesPath = join(destinationPath, "src", "discord")
     
     await copy(templateProjectPath, destinationPath, { errorOnExist: false, overwrite: true });
+    await copy(templateGitignorePath, join(destinationPath, ".gitignore"), { errorOnExist: false, overwrite: true })
 
     const packageJson = JSON.parse(readFileSync(join(destinationPath, "package.json"), {encoding: "utf-8"}))
     packageJson.name = projectName;
@@ -56,7 +58,7 @@ async function bot(props: Props){
     if (includeExamples){
         await copy(templateExamplesPath, destinationExamplesPath, { errorOnExist: false, overwrite: true })
     }
-
+    
     const installDepSpinner = spinner();
 
     if (installDep){
