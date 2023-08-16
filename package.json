@@ -11,6 +11,9 @@
     "build": "rm -rf dist && tsc",
     "link": "npm unlink rincko-cli && tsc -p . && npm link"
   },
+  "repository": {
+    "url": "https://github.com/rinckodev/umbra"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
