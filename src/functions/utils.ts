@@ -12,6 +12,8 @@ export function cancelOperation(message="Operation cancelled."){
 }
 
 import validateProjectName from "validate-npm-package-name"
+import { PackageJson } from "../@types/PackageJson";
+import { readFileSync, writeFileSync } from "fs-extra";
 
 export function validateNpmName(name: string): { valid: boolean, problems?: string[] }{
   const { validForNewPackages, errors, warnings } = validateProjectName(name)
@@ -25,4 +27,20 @@ export function validateNpmName(name: string): { valid: boolean, problems?: stri
       ...(warnings || []),
     ],
   }
+}
+
+// export function getPackageJson(path: string){
+//   const packageJson: PackageJson = JSON.parse(readFileSync(path, {encoding: "utf-8"}))
+
+//   writeFileSync(join(destinationPath, "package.json"), JSON.stringify(packageJson, null, 2));
+// }
+interface EditPackageJsonProps {
+  path: string,
+  propertyName: string,
+  propertyValue: any
+}
+export function editJson({ path, propertyName, propertyValue }: EditPackageJsonProps){
+  const packageJson = JSON.parse(readFileSync(path, {encoding: "utf-8"}))
+  packageJson[propertyName] = propertyValue;
+  writeFileSync(path, JSON.stringify(packageJson, null, 2));
 }

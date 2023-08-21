@@ -7,7 +7,7 @@
         "protection": "Guard",
         "systems":"Ci",
         "discord": "Client",
-        "pressets": "Template",
+        "presets": "Template",
         "default": "Project",
         "firestore": "Firebase",
         "mongodb": "Database",
@@ -18,6 +18,6 @@
         "config.json": "Raml",
         "settings.json": "Raml",
         "example_firebase.json": "Firebase",
+        "gitignore": "Git",
     },
-    "vscord.enabled": false
 }

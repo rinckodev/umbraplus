@@ -22,7 +22,6 @@ See what you can create with this cli:
   - v14
   - v15 (soon)
 - Discord Rich Presence (soon)
-- Express Api (soon)
 
 Join our Discord server, where you can ask questions, learn, and share anything you want.<br>
 Our group is open to programmers and gamers alike.<br>

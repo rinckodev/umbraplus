@@ -126,7 +126,10 @@ export class ExtendedClient<Ready extends boolean = boolean> extends Client<Read
     private async whenReady(client: Client<true>){
         const messages: string[] = [];
         
-        messages.push(`${ck.green("✓ Bot online")} ${ck.blue.underline("discord.js")} 📦 ${ck.yellow(version)}`);
+        messages.push(
+            `${ck.green("✓ Bot online")} ${ck.blue.underline("discord.js")} 📦 ${ck.yellow(version)}`,
+            `${ck.greenBright(`➝ Connected with ${ck.underline(client.user.username)}`)}`
+        );
         
         await client.application.commands.set(Array.from(this.Commands.values()))
         .then((c) => messages.push(`${ck.cyan("⟨ / ⟩")} ${ck.green(`${c.size} commands defined successfully!`)}`))

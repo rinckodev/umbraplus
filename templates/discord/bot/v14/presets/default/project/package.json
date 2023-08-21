@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node .",
     "dev": "ts-node -r tsconfig-paths/register --transpiler sucrase/ts-node-plugin src/index.ts",
-    "build": "rm -rf dist && tsc && tscpaths -p tsconfig.json -s ./src -o ./dist"
+    "build": "tsc && tscpaths -p tsconfig.json -s ./src -o ./dist"
   },
   "keywords": [
     "bot",

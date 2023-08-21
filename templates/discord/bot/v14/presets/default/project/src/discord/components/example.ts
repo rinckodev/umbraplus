@@ -4,6 +4,6 @@ export default new Component({
     customId: "example-component-button",
     type: "Button", cache: "cached",
     async run(interaction) {
-        // do things
+        interaction.reply({ ephemeral: true, content: "This is a button component!"});
     },
 });

@@ -22,6 +22,16 @@
                     "placeholder": "my-discord-bot",
                     "defaultValue": "my-discord-bot"
                 },
+                "presets":{
+                    "message": "Select bot preset",
+                    "options": [
+                        { "label": "Default", "value": "default", "hint": "Default bot" },
+                        { "label": "Firestore", "value": "firestore", "hint": "Bot with Firestore database" },
+                        { "label": "MongoDb", "value": "mongodb", "hint": "Bot with MongoDb database"  },
+                        { "label": "MySql", "value": "mysql", "hint": "Bot with MySql database"  },
+                        { "label": "QuickDb", "value": "quickdb", "hint": "Bot with QuickDb local database" }
+                    ]
+                },
                 "includeExamples":{
                     "message": "Add usage examples?",
                     "defaultValue": true
@@ -42,7 +52,8 @@
                         "dev":"npm run dev",
                         "readme":"See project README.md"
                     }
-                }
+                },
+                "outro": "Questions? http://discord.gg/tTu8dGN"
             }
         }
     },
@@ -54,7 +65,7 @@
             "title": "Selecione o app que deseja criar",
             "options": [
                 { "label": "Bot de discord", "value": "discord-bot" },
-                { "label": "Rich Presence de discord", "value": "discord-richpresence", "hint": "Soon" }
+                { "label": "Rich Presence de discord", "value": "discord-richpresence", "hint": "Breve" }
             ],
             "errors":{
                 "unavailable": "O item selecionado está indisponível no momento"
@@ -68,6 +79,16 @@
                     "message": "Nome do projeto?",
                     "placeholder": "meu-bot-discord",
                     "defaultValue": "meu-bot-discord"
+                },
+                "presets":{
+                    "message": "Selecione uma predefinição de bot",
+                    "options": [
+                        { "label": "Padrão", "value": "default", "hint": "Bot padrão" },
+                        { "label": "Firestore", "value": "firestore", "hint": "Bot com banco de dados Firestore" },
+                        { "label": "MongoDb", "value": "mongodb", "hint": "Bot com banco de dados MongoDb"  },
+                        { "label": "MySql", "value": "mysql", "hint": "Bot com banco de dados MySql"  },
+                        { "label": "QuickDb", "value": "quickdb", "hint": "Bot com bando de dados local QuickDb" }
+                    ]
                 },
                 "includeExamples":{
                     "message": "Adicionar exemplos de usos?",
@@ -83,7 +104,7 @@
                 },
                 "installDepSpinner":{
                     "start": "Instalando dependências",
-                    "stop": "Dependencias instaladas."
+                    "stop": "Dependências instaladas."
                 },
                 "note":{
                     "title": "Concluído",
@@ -93,7 +114,8 @@
                         "dev":"npm run dev",
                         "readme":"Veja o README.md do projeto"
                     }
-                }
+                },
+                "outro": "Dúvidas? http://discord.gg/tTu8dGN"
             }
         }
     }

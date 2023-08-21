@@ -5,7 +5,6 @@ dist
 
 *deprecated
 *.exe
-*.app
 *.config
 *.zip
 *.sqlite
