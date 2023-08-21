@@ -69,21 +69,26 @@ async function bot(props: ProgramProps) {
         }
     }
     
-    await copy(paths.template.project, destinationPath, {
-        errorOnExist: false, overwrite: true, async filter(src){
+    const copyProjectOperation = await copy(paths.template.project, destinationPath, {
+        errorOnExist: false, overwrite: true,
+        filter: async (srcPath) => {
+            const srcBasename = basename(srcPath)
             const ignoreItems = ["node_modules", "package-lock.json", ".env.development"]
-            if (ignoreItems.some(ignoreSrc => src.includes(ignoreSrc))){
-                return false
-            }
+            if (ignoreItems.includes(srcBasename)) return false;
             return true;
         }
     })
-
+    .then(() => ({ sucess: true, err: null })).catch(err => ({ sucess: false, err }));
+    
+    if (!copyProjectOperation.sucess){
+        console.log(copyProjectOperation.err);
+        return;
+    }
+    
     await copy(paths.features.snippets, join(destinationPath, "/.vscode"))
     await copy(paths.features.guide, destinationPath)
     await copy(paths.template.gitignore, join(destinationPath, ".gitignore"))
-
-    editJson({
+    await editJson({
         path: join(destinationPath, "package.json"),
         propertyName: "name",
         propertyValue: projectName
@@ -122,109 +127,5 @@ async function bot(props: ProgramProps) {
 
     doneProgram();    
 }
-
-// async function bot(props: ProgramProps){
-//     const { lang, presets } = props;
-//     const currentAppLang = languages[lang].apps["discord-bot"]
-
-//     let projectName: string = "";
-//     let destinationPath: string = "";
-//     let appPath: string = "";
-//     let preset = "default";
-
-//     if (!props.appName){
-//         const projectName = await text(currentAppLang.projectName)
-//         checkCancel(projectName);
-//         props.appName = String(projectName);
-//         appPath = props.appName;
-//     }
-
-//     const validation = validateNpmName(basename(resolve(props.appName)))
-//     if (!validation.valid && validation.problems) {
-//         props.appName = undefined;
-//         log.error(currentAppLang.errors.invalidProjectName + validation.problems[0])
-//         bot(props);
-//         return;
-//     }
-
-//     projectName = props.appName;
-//     destinationPath = resolve(projectName);
-//     const isDestinationCwd = destinationPath == cwd;
-
-//     if (isDestinationCwd){
-//         projectName = basename(cwd);
-//     }
-
-//     if (presets){
-//         const selected = await select({
-//             message: "Select the bot preset",
-//             options: [
-//                 { label: "default", value: "default" },
-//                 { label: "firestore", value: "firestore" },
-//                 { label: "mongodb", value: "mongodb" },
-//                 { label: "mysql", value: "mysql" },
-//                 { label: "quickdb", value: "quickdb" }
-//             ],
-//         })
-//         checkCancel(selected);
-//     }
-    
-//     const includeExamples = await confirm(currentAppLang.includeExamples)
-//     checkCancel(includeExamples);
-
-//     const installDep = await confirm(currentAppLang.installDep);
-//     checkCancel(installDep);
-    
-//     const templateProjectPath = join(templatePath, "v14", "presets", preset)
-//     const templateExamplesPath = join(templatePath, "v14", "examples")
-//     const templateGitignorePath = join(templatePath, "v14", "gitignore")
-//     const destinationExamplesPath = join(destinationPath, "src", "discord")
-    
-//     await copy(templateProjectPath, destinationPath, { 
-//         errorOnExist: false, overwrite: true,
-//         async filter(src){ // development mode
-//             const ignoreItems = [
-//                 "node_modules",
-//                 "package-lock.json",
-//                 ".env.development"
-//             ]
-//             if (ignoreItems.some((ignoreSrc) => src.includes(ignoreSrc))) {
-//                 return false; 
-//             }
-//             return true;
-//         } 
-//     });
-//     await copy(templateGitignorePath, join(destinationPath, ".gitignore"), { errorOnExist: false, overwrite: true })
-
-//     const packageJson = JSON.parse(readFileSync(join(destinationPath, "package.json"), {encoding: "utf-8"}))
-//     packageJson.name = projectName;
-
-//     writeFileSync(join(destinationPath, "package.json"), JSON.stringify(packageJson, null, 2));
-
-//     if (includeExamples){
-//         await copy(templateExamplesPath, destinationExamplesPath, { errorOnExist: false, overwrite: true })
-//     }
-    
-//     const installDepSpinner = spinner();
-
-//     const notes: string[] = [];
-
-//     if (!isDestinationCwd) notes.push(currentAppLang.note.notes.cd.replace("${path}", appPath))
-//     if (!installDep) notes.push(currentAppLang.note.notes.dependencies)
-//     notes.push(currentAppLang.note.notes.dev, currentAppLang.note.notes.readme)
-
-//     if (installDep){
-//         installDepSpinner.start(currentAppLang.installDepSpinner.start)
-//         const child = spawn("npm", ["install"], { stdio: "inherit", cwd: destinationPath });
-
-//         child.on("close", () => {
-//             installDepSpinner.stop(currentAppLang.installDepSpinner.stop);
-//             note(notes.join("\n"), currentAppLang.note.title);
-//         })
-//         return;
-//     }
-    
-//     note(notes.join("\n"), currentAppLang.note.title);
-// }
 
 export { bot };

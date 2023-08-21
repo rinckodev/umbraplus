@@ -13,7 +13,7 @@ export function cancelOperation(message="Operation cancelled."){
 
 import validateProjectName from "validate-npm-package-name"
 import { PackageJson } from "../@types/PackageJson";
-import { readFileSync, writeFileSync } from "fs-extra";
+import { readFile, readFileSync, writeFile, writeFileSync } from "fs-extra";
 
 export function validateNpmName(name: string): { valid: boolean, problems?: string[] }{
   const { validForNewPackages, errors, warnings } = validateProjectName(name)
@@ -39,8 +39,8 @@ interface EditPackageJsonProps {
   propertyName: string,
   propertyValue: any
 }
-export function editJson({ path, propertyName, propertyValue }: EditPackageJsonProps){
-  const packageJson = JSON.parse(readFileSync(path, {encoding: "utf-8"}))
+export async function editJson({ path, propertyName, propertyValue }: EditPackageJsonProps){
+  const packageJson = JSON.parse(await readFile(path, {encoding: "utf-8"}))
   packageJson[propertyName] = propertyValue;
-  writeFileSync(path, JSON.stringify(packageJson, null, 2));
+  await writeFile(path, JSON.stringify(packageJson, null, 2));
 }
