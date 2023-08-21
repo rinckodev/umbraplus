@@ -36,7 +36,12 @@
                 },
                 "note":{
                     "title": "Done",
-                    "message": "See project README.md"
+                    "notes": {
+                        "cd":"cd ${path}",
+                        "dependencies":"npm install",
+                        "dev":"npm run dev",
+                        "readme":"See project README.md"
+                    }
                 }
             }
         }
@@ -82,7 +87,12 @@
                 },
                 "note":{
                     "title": "Concluído",
-                    "message": "Veja o README.md do projeto"
+                    "notes": {
+                        "cd":"cd ${path}",
+                        "dependencies":"npm install",
+                        "dev":"npm run dev",
+                        "readme":"Veja o README.md do projeto"
+                    }
                 }
             }
         }

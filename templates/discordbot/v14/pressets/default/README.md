@@ -1,6 +1,8 @@
 # Awsome Bot Base
 This is a very complete discord bot base created by [@rinckodev](https://github.com/rinckodev), you have the typescript features in action when developing commands and systems for your bot, to start just add your token in the .env file and use the scripts from package.json
 
+[Setup your application](docs/setup-your-application.md)
+
 ## Scripts
 ```
 npm run dev

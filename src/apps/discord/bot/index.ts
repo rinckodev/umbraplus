@@ -1,24 +1,27 @@
-import { log, text, confirm, note, outro, spinner,  } from "@clack/prompts";
+import { log, text, confirm, note, spinner,  } from "@clack/prompts";
 import { join, resolve, basename } from "path";
-import { Props } from "../../../main";
 import { checkCancel, validateNpmName } from "../../../functions/utils";
 import { copy, readFileSync, writeFileSync } from "fs-extra";
-import { spawn, sync } from "cross-spawn";
+import { spawn } from "cross-spawn";
+import { ProgramProps } from "../../../@types/ProgramProps";
+import { languages } from "../../..";
 
 const cwd = process.cwd();
 const templatePath = join(__dirname, "../../../..", "templates", "discordbot");
 
-async function bot(props: Props){
-    const { lang, languages } = props;
+async function bot(props: ProgramProps){
+    const { lang } = props;
     const currentAppLang = languages[lang].apps["discord-bot"]
 
     let projectName: string = "";
     let destinationPath: string = "";
+    let appPath: string = "";
 
     if (!props.appName){
         const projectName = await text(currentAppLang.projectName)
         checkCancel(projectName);
         props.appName = String(projectName);
+        appPath = props.appName;
     }
 
     const validation = validateNpmName(basename(resolve(props.appName)))
@@ -31,8 +34,9 @@ async function bot(props: Props){
 
     projectName = props.appName;
     destinationPath = resolve(projectName);
+    const isDestinationCwd = destinationPath == cwd;
 
-    if (destinationPath == cwd){
+    if (isDestinationCwd){
         projectName = basename(cwd);
     }
 
@@ -42,12 +46,25 @@ async function bot(props: Props){
     const installDep = await confirm(currentAppLang.installDep);
     checkCancel(installDep);
     
-    const templateProjectPath = join(templatePath, "v14", "project")
+    const templateProjectPath = join(templatePath, "v14", "pressets", "default")
     const templateExamplesPath = join(templatePath, "v14", "examples")
     const templateGitignorePath = join(templatePath, "v14", "gitignore")
     const destinationExamplesPath = join(destinationPath, "src", "discord")
     
-    await copy(templateProjectPath, destinationPath, { errorOnExist: false, overwrite: true });
+    await copy(templateProjectPath, destinationPath, { 
+        errorOnExist: false, overwrite: true,
+        async filter(src){ // development mode
+            const ignoreItems = [
+                "node_modules",
+                "package-lock.json",
+                ".env.development"
+            ]
+            if (ignoreItems.some((ignoreSrc) => src.includes(ignoreSrc))) {
+                return false; 
+            }
+            return true;
+        } 
+    });
     await copy(templateGitignorePath, join(destinationPath, ".gitignore"), { errorOnExist: false, overwrite: true })
 
     const packageJson = JSON.parse(readFileSync(join(destinationPath, "package.json"), {encoding: "utf-8"}))
@@ -61,18 +78,24 @@ async function bot(props: Props){
     
     const installDepSpinner = spinner();
 
+    const notes: string[] = [];
+
+    if (!isDestinationCwd) notes.push(currentAppLang.note.notes.cd.replace("${path}", appPath))
+    if (!installDep) notes.push(currentAppLang.note.notes.dependencies)
+    notes.push(currentAppLang.note.notes.dev, currentAppLang.note.notes.readme)
+
     if (installDep){
         installDepSpinner.start(currentAppLang.installDepSpinner.start)
         const child = spawn("npm", ["install"], { stdio: "inherit", cwd: destinationPath });
 
         child.on("close", () => {
             installDepSpinner.stop(currentAppLang.installDepSpinner.stop);
-            note(currentAppLang.note.message, currentAppLang.note.title);
+            note(notes.join("\n"), currentAppLang.note.title);
         })
         return;
     }
     
-    note(currentAppLang.note.message, currentAppLang.note.title);
+    note(notes.join("\n"), currentAppLang.note.title);
 }
 
 export { bot };

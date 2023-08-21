@@ -12,6 +12,5 @@
         "config.json": "Raml",
         "settings.json": "Raml",
         "example_firebase.json": "Firebase",
-    },
-    "vscord.enabled": false
+    }
 }

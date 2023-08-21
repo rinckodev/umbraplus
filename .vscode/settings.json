@@ -6,7 +6,13 @@
         "staff": "Admin",
         "protection": "Guard",
         "systems":"Ci",
-        "discord": "Client"
+        "discord": "Client",
+        "pressets": "Template",
+        "default": "Project",
+        "firestore": "Firebase",
+        "mongodb": "Database",
+        "mysql": "Database",
+        "quickdb": "Json",
     },
     "material-icon-theme.files.associations": {
         "config.json": "Raml",
