@@ -1,5 +1,5 @@
 import { Command } from "@discord/base";
-import { ApplicationCommandType } from "discord.js";
+import { ApplicationCommandOptionType, ApplicationCommandType } from "discord.js";
 
 export default new Command({
     name: "example",

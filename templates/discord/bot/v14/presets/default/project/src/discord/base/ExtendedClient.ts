@@ -1,11 +1,12 @@
-import ck from "chalk";
-import { ApplicationCommandType, AutocompleteInteraction, BitFieldResolvable, ChatInputCommandInteraction, Client, ClientEvents, Collection, CommandInteraction, ComponentType, GatewayIntentsString, IntentsBitField, Interaction, InteractionType, MessageContextMenuCommandInteraction, Partials, UserContextMenuCommandInteraction, version } from "discord.js";
+import { ApplicationCommandType, AutocompleteInteraction, BitFieldResolvable, ChatInputCommandInteraction, Client, ClientEvents, Collection, CommandInteraction, ComponentType, DiscordAPIError, ErrorEvent, GatewayIntentsString, IntentsBitField, Interaction, InteractionType, MessageContextMenuCommandInteraction, Partials, UserContextMenuCommandInteraction, version } from "discord.js";
 import { glob } from "glob";
 import { join } from "path";
 import { Command } from "./Command";
 import { Component } from "./Components";
 import { Event } from "./Event";
 import { processEnv } from "@/settings";
+import ck from "chalk";
+import { brBuilder } from "@/functions";
 
 export class ExtendedClient<Ready extends boolean = boolean> extends Client<Ready> {
     public Commands: Collection<string, Command["data"]> = new Collection();
@@ -34,8 +35,8 @@ export class ExtendedClient<Ready extends boolean = boolean> extends Client<Read
         await this.loadCommands();
 
         this.login(process.env.BOT_TOKEN);
-        this.on("ready", this.whenReady);
         this.on("interactionCreate", this.registerListeners);
+        this.once("ready", this.whenReady);
     }
     private async loadCommands(){
         const commandsDir = join(__dirname, "../commands");
@@ -44,9 +45,9 @@ export class ExtendedClient<Ready extends boolean = boolean> extends Client<Read
         const messages: string[] = [ck.bgBlue(" Commands ")];
 
         for (const path of paths){
-            const { default: command }: { default: Command } = await import(join(commandsDir, path));
-            if (!command?.data?.name) {
-                messages.push(ck.italic.yellow(`! "${path}" file is not exporting a Command`));
+            const { default: command } = await import(join(commandsDir, path));
+            if (!(command instanceof Command)) {
+                messages.push(ck.italic.yellow(`! "${path}" file is not exporting a`, ck.green("Command")));
                 continue;
             }
 
@@ -66,9 +67,9 @@ export class ExtendedClient<Ready extends boolean = boolean> extends Client<Read
         const messages: string[] = [ck.bgYellow.black(" Events ")];
 
         for (const path of paths){
-            const { default: event }: { default: Event<keyof ClientEvents> } = await import(join(eventsDir, path));
-            if (!event?.data) {
-                messages.push(ck.italic.yellow(`! "${path}" file is not exporting a Event`));
+            const { default: event } = await import(join(eventsDir, path));
+            if (!(event instanceof Event)) {
+                messages.push(ck.italic.yellow(`! "${path}" file is not exporting a`, ck.green("Event")));
                 continue;
             }
             const client = this as ExtendedClient<true>;
@@ -78,9 +79,6 @@ export class ExtendedClient<Ready extends boolean = boolean> extends Client<Read
             } else {
                 this.on(name, (...args) => run(client, ...args));
             }
-
-            // if (event.data.once) this.once(event.data.name, event.data.run);
-            // else this.on(event.data.name, event.data.run);
 
             messages.push(`${ck.green("✓")} ${ck.yellow.underline(path)} ${ck.green(`registered as ${ck.cyan(event.data.name)}`)}`);
         }
@@ -94,9 +92,9 @@ export class ExtendedClient<Ready extends boolean = boolean> extends Client<Read
         const messages: string[] = [ck.bgGreenBright.black(" Components ")];
 
         for (const path of paths){
-            const { default: component }: { default: Component } = await import(join(componentsDir, path));
-            if (!component?.data?.customId) {
-                messages.push(ck.italic.yellow(`! "${path}" file is not exporting a Component`));
+            const { default: component } = await import(join(componentsDir, path));
+            if (!(component instanceof Component)) {
+                messages.push(ck.italic.yellow(`! "${path}" file is not exporting a`, ck.green("Component")));
                 continue;
             }
 
@@ -122,20 +120,6 @@ export class ExtendedClient<Ready extends boolean = boolean> extends Client<Read
             case "Modal": this.Modals.set(component.customId, component);
                 break;
         }
-    }
-    private async whenReady(client: Client<true>){
-        const messages: string[] = [];
-        
-        messages.push(
-            `${ck.green("✓ Bot online")} ${ck.blue.underline("discord.js")} 📦 ${ck.yellow(version)}`,
-            `${ck.greenBright(`➝ Connected with ${ck.underline(client.user.username)}`)}`
-        );
-        
-        await client.application.commands.set(Array.from(this.Commands.values()))
-        .then((c) => messages.push(`${ck.cyan("⟨ / ⟩")} ${ck.green(`${c.size} commands defined successfully!`)}`))
-        .catch(err => messages.push(ck.red(`✗ An error occurred while trying to set the commands \n${err}`)));
-
-        console.log("\n", messages.join("\n"));
     }
     private async registerListeners(interaction: Interaction){
         if (interaction.isCommand()) this.onCommand(interaction);
@@ -194,6 +178,23 @@ export class ExtendedClient<Ready extends boolean = boolean> extends Client<Read
             }
         }
 
+    }
+    private async whenReady(client: Client<true>){
+        const messages: string[] = [];
+        
+        messages.push(
+            `${ck.green("✓ Bot online")} ${ck.blue.underline("discord.js")} 📦 ${ck.yellow(version)}`,
+            `${ck.greenBright(`➝ Connected with ${ck.underline(client.user.username)}`)}`
+        );
+        
+        await client.application.commands.set(Array.from(this.Commands.values()))
+        .then((c) => messages.push(`${ck.cyan("⟨ / ⟩")} ${ck.green(`${c.size} commands defined successfully!`)}`))
+        .catch(({ message }: DiscordAPIError) => messages.push(brBuilder("",
+            ck.bgRed.white(" ✗ An error occurred while trying to set the commands "),
+            ck.red("Message:", message),
+        )));
+
+        console.log(brBuilder("", ...messages));
     }
 }
 

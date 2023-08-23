@@ -36,7 +36,7 @@ type CommandProps<DmPermission extends boolean> =
 }
 
 type CommandData<DmPermission extends boolean> = CommandProps<DmPermission> & ApplicationCommandData & {
-    dmPermission?: DmPermission,
+    dmPermission: DmPermission,
     components?: Component[]
 }
 

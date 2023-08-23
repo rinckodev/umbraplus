@@ -1,5 +1,5 @@
 import { Command, Component } from "@/discord/base";
-import { ActionRowBuilder, ApplicationCommandOptionType, ApplicationCommandType, Attachment, AttachmentBuilder, Collection, CommandInteractionOptionResolver, EmbedBuilder, ModalBuilder, TextChannel, TextInputBuilder, TextInputStyle, codeBlock } from "discord.js";
+import { ActionRowBuilder, ApplicationCommandOptionType, ApplicationCommandType, Attachment, AttachmentBuilder, Collection, EmbedBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, codeBlock } from "discord.js";
 
 const members: Collection<string, Attachment> = new Collection();
 
@@ -51,7 +51,7 @@ export default new Command({
             customId: "post-modal", type: "Modal", cache: "cached",
             async run(interaction) {
                 console.log("test");
-                const { member, fields, guild } = interaction;
+                const { member, fields, channel } = interaction;
                 
                 const image = members.get(member.id);
                 if (!image){
@@ -65,11 +65,9 @@ export default new Command({
                 const title = fields.getTextInputValue("post-title-input");
                 const description = fields.getTextInputValue("post-description-input");
 
-                const channel = guild.channels.cache.get("1086511902173171752") as TextChannel;
-
                 await interaction.deferReply({ephemeral: true});
 
-                await channel.send({
+                await channel?.send({
                     embeds: [
                         new EmbedBuilder({
                             title, description,

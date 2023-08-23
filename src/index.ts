@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { intro } from "@clack/prompts";
-import { cyan, green } from "chalk";
+import ck from "chalk";
 import { Command, Option } from "commander";
 import { readFileSync } from "fs-extra";
 import { join } from "path";
@@ -19,7 +19,7 @@ const props: ProgramProps = { lang: "en_us", presets: false }
 const program = new Command(packageJson.name)
 .version(packageJson.version)
 .arguments('[project-directory]')
-.usage(`${green('<project-directory>')} [options]`)
+.usage(`<project-directory>' [options]`)
 .action((name) => {
     props.appName = name;
 })
@@ -37,7 +37,7 @@ const options = program.opts<Partial<ProgramProps>>();
 async function main(props: ProgramProps){
     if (options.lang) props.lang = options.lang;
     if (options.presets) props.presets = options.presets;
-    intro(cyan("✨", languages[props.lang].main.intro, "✨"));
+    intro(`✨ ${ck.cyan(languages[props.lang].main.intro)} ${ck.underline.gray(packageJson.version)}`);
     apps(props);
 }
 main(props);
