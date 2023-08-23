@@ -50,7 +50,6 @@ export default new Command({
         new Component({
             customId: "post-modal", type: "Modal", cache: "cached",
             async run(interaction) {
-                console.log("test");
                 const { member, fields, channel } = interaction;
                 
                 const image = members.get(member.id);
