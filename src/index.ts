@@ -3,7 +3,7 @@ import { intro } from "@clack/prompts";
 import ck from "chalk";
 import { Command, Option } from "commander";
 import { readFileSync } from "fs-extra";
-import { join } from "path";
+import { join } from "node:path";
 import { ProgramProps } from "./@types/ProgramProps";
 import { PackageJson } from "./@types/PackageJson";
 

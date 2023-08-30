@@ -6,10 +6,14 @@ import { resolve } from "path";
 const rootDir = process.cwd();
 const developmentEnvPath = resolve(rootDir, ".env.development");
 
+const dev = existsSync(developmentEnvPath);
+
 const { parsed: parsedEnv } = dotenv.config({
-    path: existsSync(developmentEnvPath) ? developmentEnvPath : resolve(rootDir, ".env")
+    path: existsSync(developmentEnvPath) 
+    ? developmentEnvPath 
+    : resolve(rootDir, ".env")
 });
 
-const processEnv = parsedEnv as NodeJS.ProcessEnv;
+const processEnv = { ...(parsedEnv as NodeJS.ProcessEnv), dev };
 
 export { settings, processEnv };

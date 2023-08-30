@@ -9,7 +9,7 @@
     "test": "npm run build && npm run link",
     "dev": "ts-node --transpiler sucrase/ts-node-plugin ./index.ts",
     "build": "rm -rf dist && tsc",
-    "link": "npm unlink umbraplus && tsc -p . && npm link "
+    "link": "npm unlink umbraplus && tsc -p . && npm link"
   },
   "repository": {
     "url": "https://github.com/rinckodev/umbraplus"

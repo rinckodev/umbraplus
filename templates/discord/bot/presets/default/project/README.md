@@ -1,4 +1,6 @@
 # Awsome Bot Base
+* [This project was generated using Umbra Plus CLI](https://github.com/rinckodev/umbraplus)
+
 This is a very complete discord bot base created by [@rinckodev](https://github.com/rinckodev), you have the typescript features in action when developing commands and systems for your bot, to start just add your token in the .env file and use the scripts from package.json
 
 [Setup your application](docs/setup-your-application.md)
@@ -41,7 +43,7 @@ import { Event } from "@discord/base";
 
 export default new Event({
     name: "guildMemberAdd",
-    run(member) {
+    run(client, member) {
         console.log(`New member ${member.user.username}`);
     },
 });
@@ -49,7 +51,7 @@ export default new Event({
 ```ts
 export default new Event({
     name: "voiceStateUpdate",
-    run(oldState, newState) {
+    run(client, oldState, newState) {
         console.log(oldState.channel);
     },
 });
@@ -66,8 +68,7 @@ import { EmbedBuilder } from "discord.js";
 
 export default new Component({
     customId: "register-start-modal",
-    cache: "cached",
-    type: "Modal",
+    type: "Modal", cache: "cached",
     async run(interaction) {
         const { fields } = interaction;
         const nickname = fields.getTextInputValue("register-nickname-input");
@@ -133,7 +134,8 @@ export default new Command({
     },
     components: [
         new Component({
-            customId: "post-modal", type: "Modal", cache: "cached",
+            customId: "post-modal", 
+            type: "Modal", cache: "cached",
             async run(interaction) {
                 const { member, fields, guild } = interaction;
                 

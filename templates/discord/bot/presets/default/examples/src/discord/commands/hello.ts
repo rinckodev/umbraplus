@@ -9,7 +9,7 @@ export default new Command({
     description: "Select language",
     dmPermission: false,
     type: ApplicationCommandType.ChatInput,
-    async run({interaction}){
+    async run({ interaction }){
 
         interaction.reply({  ephemeral: true, 
             embeds: [

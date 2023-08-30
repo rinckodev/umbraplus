@@ -1,5 +1,7 @@
 export { setTimeout as sleep } from "node:timers/promises";
-import { isCancel, cancel } from "@clack/prompts";
+import { cancel, isCancel } from "@clack/prompts";
+import { readFile, writeFile } from "fs-extra";
+import validateProjectName from "validate-npm-package-name";
 
 export function checkCancel(value: any){
     if (isCancel(value)) {
@@ -10,10 +12,6 @@ export function cancelOperation(message="Operation cancelled."){
     cancel(message);
     process.exit(0);
 }
-
-import validateProjectName from "validate-npm-package-name"
-import { PackageJson } from "../@types/PackageJson";
-import { readFile, readFileSync, writeFile, writeFileSync } from "fs-extra";
 
 export function validateNpmName(name: string): { valid: boolean, problems?: string[] }{
   const { validForNewPackages, errors, warnings } = validateProjectName(name)
@@ -28,18 +26,12 @@ export function validateNpmName(name: string): { valid: boolean, problems?: stri
     ],
   }
 }
-
-// export function getPackageJson(path: string){
-//   const packageJson: PackageJson = JSON.parse(readFileSync(path, {encoding: "utf-8"}))
-
-//   writeFileSync(join(destinationPath, "package.json"), JSON.stringify(packageJson, null, 2));
-// }
-interface EditPackageJsonProps {
+interface EditJsonProps {
   path: string,
   propertyName: string,
-  propertyValue: any
+  propertyValue: string | number | boolean | Object
 }
-export async function editJson({ path, propertyName, propertyValue }: EditPackageJsonProps){
+export async function editJson({ path, propertyName, propertyValue }: EditJsonProps){
   const packageJson = JSON.parse(await readFile(path, {encoding: "utf-8"}))
   packageJson[propertyName] = propertyValue;
   await writeFile(path, JSON.stringify(packageJson, null, 2));

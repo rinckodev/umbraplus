@@ -8,6 +8,6 @@ export function createLinkButton(data: Omit<LinkButtonComponentData, "style" | "
     return new ButtonBuilder({style: ButtonStyle.Link, ...data});
 }
 
-export function createModalInput(input: Partial<TextInputComponentData>){
+export function createModalInput(input: Partial<Omit<TextInputComponentData, "type">>){
     return new ActionRowBuilder<TextInputBuilder>({components: [new TextInputBuilder(input)]});
 }

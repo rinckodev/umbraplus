@@ -1,12 +1,12 @@
 import { ApplicationCommandType, AutocompleteInteraction, BitFieldResolvable, ChatInputCommandInteraction, Client, ClientEvents, Collection, CommandInteraction, ComponentType, DiscordAPIError, ErrorEvent, GatewayIntentsString, IntentsBitField, Interaction, InteractionType, MessageContextMenuCommandInteraction, Partials, UserContextMenuCommandInteraction, version } from "discord.js";
 import { glob } from "glob";
-import { join } from "path";
+import { join } from "node:path";
 import { Command } from "./Command";
 import { Component } from "./Components";
 import { Event } from "./Event";
 import { processEnv } from "@/settings";
-import ck from "chalk";
 import { brBuilder } from "@/functions";
+import ck from "chalk";
 
 export class ExtendedClient<Ready extends boolean = boolean> extends Client<Ready> {
     public Commands: Collection<string, Command["data"]> = new Collection();
@@ -199,5 +199,7 @@ export class ExtendedClient<Ready extends boolean = boolean> extends Client<Read
 }
 
 async function getFiles(filesDirectory: string){
-    return await glob("**/*.{ts,js}", {cwd: filesDirectory});
+    return await glob("**/*.{ts,js}", {
+        cwd: filesDirectory
+    });
 }

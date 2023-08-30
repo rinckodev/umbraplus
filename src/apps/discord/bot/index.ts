@@ -1,14 +1,14 @@
 import ck from "chalk";
-import { confirm, log, note, outro, select, spinner, text } from "@clack/prompts";
-import { copy } from "fs-extra";
-import { basename, join, resolve } from "path";
+import { confirm, log, multiselect, note, outro, select, spinner, text } from "@clack/prompts";
+import { copy, existsSync, moveSync } from "fs-extra";
+import { basename, join, resolve } from "node:path";
 import { languages, programRootDir } from "../../..";
 import { ProgramProps } from "../../../@types/ProgramProps";
 import { checkCancel, editJson, sleep, validateNpmName } from "../../../functions/utils";
 import spawn from "cross-spawn";
 
 const cwd = process.cwd();
-const templatePath = join(programRootDir, "templates", "discord", "bot", "v14");
+const templatePath = join(programRootDir, "templates", "discord", "bot");
 
 async function bot(props: ProgramProps) {
     const { lang, presets, appName } = props;
@@ -39,18 +39,12 @@ async function bot(props: ProgramProps) {
     const isDestinationCwd = destinationPath == cwd;
     if (isDestinationCwd) projectName = basename(cwd);
 
-    if (presets){
-        const selected = await select(programLang.presets)
-        checkCancel(selected);
-        preset = String(selected)
-    }
-
-    const includeExamples = await confirm(programLang.includeExamples)
-    checkCancel(includeExamples);
-
-    const installDependencies = await confirm(programLang.installDep);
-    checkCancel(installDependencies);
-
+    // if (presets){
+    //     const selected = await select(programLang.presets)
+    //     checkCancel(selected);
+    //     preset = String(selected)
+    // } // soon
+    
     const presetPath = join(templatePath, "presets", preset)
 
     const paths = {
@@ -63,11 +57,14 @@ async function bot(props: ProgramProps) {
             project: join(presetPath, "project"),
             examples: join(presetPath, "examples"),
             gitignore: join(presetPath, "gitignore"),
-        },
-        destination:{
-            examples: join(destinationPath, "src", "discord")
         }
     }
+
+    const includeExamples = await confirm(programLang.includeExamples)
+    checkCancel(includeExamples);
+
+    const installDependencies = await confirm(programLang.installDep);
+    checkCancel(installDependencies);
     
     const copyProjectOperation = await copy(paths.template.project, destinationPath, {
         errorOnExist: false, overwrite: true,
@@ -95,7 +92,7 @@ async function bot(props: ProgramProps) {
     })
 
     if (includeExamples){
-        await copy(paths.template.examples, paths.destination.examples, { errorOnExist: false, overwrite: true })
+        await copy(paths.template.examples, destinationPath, { errorOnExist: false, overwrite: true })
     }
     
     const notes: string[] = [];

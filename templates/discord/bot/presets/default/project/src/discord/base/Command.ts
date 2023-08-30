@@ -1,6 +1,6 @@
 import { ApplicationCommandData, ApplicationCommandType, AutocompleteInteraction, ChatInputCommandInteraction, MessageContextMenuCommandInteraction, UserContextMenuCommandInteraction } from "discord.js";
-import { ExtendedClient } from "./ExtendedClient";
 import { Component } from "./Components";
+import { ExtendedClient } from "./ExtendedClient";
 
 type CommandProps<DmPermission extends boolean> =
 {
@@ -37,7 +37,7 @@ type CommandProps<DmPermission extends boolean> =
 
 type CommandData<DmPermission extends boolean> = CommandProps<DmPermission> & ApplicationCommandData & {
     dmPermission: DmPermission,
-    components?: Component[]
+    components?: Component[],
 }
 
 export class Command<DmPermission extends boolean = boolean>{
