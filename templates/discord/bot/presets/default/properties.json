@@ -1,0 +1,8 @@
+{
+    "name": "default",
+    "displayName":{
+        "pt_br": "Padrão",
+        "en_us": "Default"
+    },
+    "disabled": false
+}

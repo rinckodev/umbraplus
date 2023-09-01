@@ -1,43 +1,95 @@
 #!/usr/bin/env node
-import { intro } from "@clack/prompts";
-import ck from "chalk";
+import { Languages, PackageJson, ProgramProperties } from "./@types/globals";
 import { Command, Option } from "commander";
-import { readFileSync } from "fs-extra";
-import { join } from "node:path";
-import { ProgramProps } from "./@types/ProgramProps";
-import { PackageJson } from "./@types/PackageJson";
+import path from "node:path";
+import { readJson } from "./helpers";
+import { PromptModule, createPromptModule } from "inquirer";
+import langs from "./program.lang.json";
+import { bot } from "./apps/bot";
+import { brBuilder } from "./helpers/format";
+import { style } from "@opentf/cli-styles";
+import clack from "@clack/prompts";
+import { S_STEP_ACTIVE } from "./constants";
 
-import languages from "./lang.json";
-const programRootDir = join(__dirname, "..");
-export { programRootDir, languages }
+const prompt = createPromptModule()
 
-import { appSelect as apps } from "./apps";
+async function main(){
+    const packageJson = readJson<PackageJson>(path.join(__dirname, "../package.json"))
+    const properties: ProgramProperties = { lang: "en_us", programRootDir: path.join(__dirname, "..") }
+    const programCommand = new Command(packageJson.name)
+    .version(packageJson.version)
+    .version(packageJson.version)
+    // .arguments("[project-directory]")
+    // .usage(`<project-directory>" [flags]`)
+    // .action((projectDirectory: string) => {
+    //     properties.destinationPath = projectDirectory;
+    // })
+    .addOption(new Option("-l, --lang <language>", "Selecet program language!").choices(["pt_br", "en_us"]))
+    .allowUnknownOption()
+    .parse(process.argv);
 
-const packageJson: PackageJson = JSON.parse(readFileSync(join(__dirname, "..", "package.json"), {encoding: "utf-8"}))
-const props: ProgramProps = { lang: "en_us", presets: false }
+    const options = programCommand.opts<{ lang?: Languages }>()
+    if (options.lang) properties.lang = options.lang;
+    const { lang } = properties;
 
-const program = new Command(packageJson.name)
-.version(packageJson.version)
-.arguments('[project-directory]')
-.usage(`<project-directory>' [options]`)
-.action((name) => {
-    props.appName = name;
-})
-.addOption(
-    new Option("-l, --lang <lang>", "Select program langugage!").choices(["pt_br", "en_us"])
-)
-// .addOption(
-//     new Option("--presets", "Add option to choose presets!")
-// ) // (soon)
-.allowUnknownOption()
-.parse(process.argv);
+    
+    clack.intro(style(`${langs.welcome[lang]} 📦 $und.hex(#505050){${packageJson.version}}`))
 
-const options = program.opts<Partial<ProgramProps>>();
+    const { program } = await prompt<{ program: string }>({
+        name: "program",
+        message: style(langs.select[lang] + "\n"),
+        prefix: style(`$hex(#00B191){${S_STEP_ACTIVE}}`),
+        type: "list",
+        choices: [
+            {
+                name: style(langs.options.discodbot[lang]),
+                checked: true,
+                value: "bot",
+            },
+            {
+                name: style(langs.options.richpresence[lang]),
+                value: "richpresence",
+                disabled: true,
+            },
+            { type: "separator" },
+            {
+                name: style(langs.options.information[lang]),
+                value: "info",
+            },
+            {
+                name: style(langs.options.leave[lang]),
+                value: "leave",
+            }
+        ],
+    })
+    
+    const programs = {
+        bot,
+        info(_properties: ProgramProperties, _prompt: PromptModule){
+            clack.note(
+                style(brBuilder(...langs.information.notes[lang])),
+                langs.information.title[lang]
+            )
+            clack.outro(style(langs.information.outro[lang]));
+            process.exit(0)
+        },
+        leave(_properties: ProgramProperties, _prompt: PromptModule){
+            clack.outro(style(langs.leave[lang]))            
+            process.exit(0)
+        },
+        invalid(_properties: ProgramProperties, _prompt: PromptModule){
+        },
+    }
 
-async function main(props: ProgramProps){
-    if (options.lang) props.lang = options.lang;
-    if (options.presets) props.presets = options.presets;
-    intro(`✨ ${ck.cyan(languages[props.lang].main.intro)} ${ck.underline.gray(packageJson.version)}`);
-    apps(props);
+    const exec = programs[program as keyof typeof programs]
+    if (!exec) {
+        programs.invalid(properties, prompt);
+        return;
+    };
+    exec(properties, prompt)
 }
-main(props);
+main()
+.catch(err => {
+    console.log(err)
+    process.exit(0)
+})

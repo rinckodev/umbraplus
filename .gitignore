@@ -3,3 +3,4 @@
 /.env
 *env.development
 *package-lock.json
+*deprecated

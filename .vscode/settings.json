@@ -19,5 +19,6 @@
         "settings.json": "Raml",
         "example_firebase.json": "Firebase",
         "gitignore": "Git",
+        "*.lang.json": "i18n"
     },
 }

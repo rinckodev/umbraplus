@@ -7,9 +7,9 @@
   "scripts": {
     "start": "node .",
     "test": "npm run build && npm run link",
-    "dev": "ts-node --transpiler sucrase/ts-node-plugin ./index.ts",
+    "dev": "ts-node --transpiler sucrase/ts-node-plugin src/index.ts",
     "build": "rm -rf dist && tsc",
-    "link": "npm unlink umbraplus && tsc -p . && npm link"
+    "link": "npm unlink umbraplus && npm link"
   },
   "repository": {
     "url": "https://github.com/rinckodev/umbraplus"
@@ -18,12 +18,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@clack/prompts": "^0.6.3",
+    "@clack/prompts": "^0.7.0",
+    "@opentf/cli-styles": "^0.9.2",
     "args": "^5.0.3",
-    "chalk": "^4.1.2",
     "commander": "^11.0.0",
     "cross-spawn": "^7.0.3",
     "fs-extra": "^11.1.1",
+    "inquirer": "^8.2.6",
+    "install": "^0.13.0",
+    "npm": "^9.8.1",
     "tslib": "^2.6.1",
     "validate-npm-package-name": "^5.0.0"
   },
@@ -31,6 +34,7 @@
     "@types/args": "^5.0.0",
     "@types/cross-spawn": "^6.0.2",
     "@types/fs-extra": "^11.0.1",
+    "@types/inquirer": "^9.0.3",
     "@types/validate-npm-package-name": "^4.0.0",
     "sucrase": "^3.34.0",
     "ts-node": "^10.9.1",

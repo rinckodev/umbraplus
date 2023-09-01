@@ -1,7 +1,7 @@
 import { hexToRgb } from "@/functions";
 import { settings } from "@/settings";
 import { Command } from "@discord/base";
-import { ApplicationCommandType, EmbedBuilder } from "discord.js";
+import { ApplicationCommandType, EmbedBuilder, chatInputApplicationCommandMention } from "discord.js";
 import { createEmbedAuthor } from "../functions/utils/embeds";
 
 export default new Command({

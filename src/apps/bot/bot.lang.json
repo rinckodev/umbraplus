@@ -1,0 +1,46 @@
+{
+    "projectName":{
+        "message":{
+            "pt_br":"$res.hex(#CACACA){Nome do projeto:}",
+            "en_us":"$res.hex(#CACACA){Project name:}"
+        },
+        "emptyWarn":{
+            "pt_br":"$res.hex(#D04545){Digite um nome para o projeto!}",
+            "en_us":"$res.hex(#D04545){Enter a name for the project!}"
+        }
+    },
+    "presets":{
+        "pt_br":"$res.hex(#CACACA){Escolha o preset:}",
+        "en_us":"$res.hex(#CACACA){Choose preset:}"
+    },
+    "examples":{
+        "pt_br":"$res.hex(#CACACA){Adicionar exemplos?}",
+        "en_us":"$res.hex(#CACACA){Add examples?}"
+    },
+    "dependencies":{
+        "pt_br":"$res.hex(#CACACA){Instalar dependências?}",
+        "en_us":"$res.hex(#CACACA){Install dependencies?}"
+    },
+    "installing":{
+        "pt_br":"Instalando dependências! Aguarde",
+        "en_us":"Installing dependencies! Wait"
+    },
+    "installed":{
+        "pt_br":"Dependências instaladas com sucesso.",
+        "en_us":"dependencies installed successfully."
+    },
+    "readme":{
+        "title":{
+            "pt_br":"Está pronto!",
+            "en_us":"Is ready!"
+        },
+        "message":{
+            "pt_br":"◌ Veja o README.md do projeto!",
+            "en_us":"◌ See project README.md"
+        }
+    },
+    "final":{
+        "pt_br":"Dúvidas? $hex(#6D83D1){http://discord.gg/tTu8dGN}",
+        "en_us":"Questions? $hex(#6D83D1){http://discord.gg/tTu8dGN}"
+    }
+}
