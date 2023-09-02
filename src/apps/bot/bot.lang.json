@@ -1,8 +1,24 @@
 {
+    "defaults":{
+        "confirm":{
+            "active": {
+                "pt_br":"Sim",
+                "en_us":"Yes"
+            },
+            "inactive":{
+                "pt_br":"Não",
+                "en_us":"No"
+            }
+        }
+    },
     "projectName":{
         "message":{
-            "pt_br":"$res.hex(#CACACA){Nome do projeto:}",
-            "en_us":"$res.hex(#CACACA){Project name:}"
+            "pt_br":"📂 Nome do projeto:",
+            "en_us":"📂 Project name:"
+        },
+        "placeholder":{
+            "pt_br":"(Use \".\" para criar neste diretório)",
+            "en_us":"(Use \".\" to create in this directory)"
         },
         "emptyWarn":{
             "pt_br":"$res.hex(#D04545){Digite um nome para o projeto!}",
@@ -10,16 +26,16 @@
         }
     },
     "presets":{
-        "pt_br":"$res.hex(#CACACA){Escolha o preset:}",
-        "en_us":"$res.hex(#CACACA){Choose preset:}"
+        "pt_br":"📑 Escolha o preset:",
+        "en_us":"📑 Choose preset:"
     },
     "examples":{
-        "pt_br":"$res.hex(#CACACA){Adicionar exemplos?}",
-        "en_us":"$res.hex(#CACACA){Add examples?}"
+        "pt_br":"📄 Adicionar exemplos?",
+        "en_us":"📄 Add examples?"
     },
     "dependencies":{
-        "pt_br":"$res.hex(#CACACA){Instalar dependências?}",
-        "en_us":"$res.hex(#CACACA){Install dependencies?}"
+        "pt_br":"📦 Instalar dependências?",
+        "en_us":"📦 Install dependencies?"
     },
     "installing":{
         "pt_br":"Instalando dependências! Aguarde",
@@ -27,7 +43,7 @@
     },
     "installed":{
         "pt_br":"Dependências instaladas com sucesso.",
-        "en_us":"dependencies installed successfully."
+        "en_us":"Dependencies installed successfully."
     },
     "readme":{
         "title":{

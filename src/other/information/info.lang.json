@@ -1,0 +1,32 @@
+{
+    "notes":{
+        "pt_br":[
+            "Crie seus próprios projetos utilizando as bases",
+            "criadas por @rinckodev. Essa CLI permite",
+            "iniciar novos projetos rapidamente com",
+            "tudo estruturado e configurado.",
+            "",
+            "Junte-se ao nosso servidor do discord, onde",
+            "você pode tirar dúvidas, aprender e compartilhar.",
+            "Nosso grupo está aberto para programadores e jogadores."
+        ],
+        "en_us":[
+            "Create your own projects using the bases",
+            "created by @rinckodev. This CLI allows",
+            "you to start new projects quickly with",
+            "everything structured and configured.",
+            "",
+            "Join our Discord server, where you can ask",
+            "questions, learn, and share anything you want.",
+            "Our group is open to programmers and gamers alike."
+        ]
+    },
+    "title":{
+        "pt_br":"Umbra Plus CLI",
+        "en_us":"Umbra Plus CLI"
+    },
+    "outro":{
+        "pt_br":"Entre: $hex(#6D83D1){http://discord.gg/tTu8dGN}",
+        "en_us":"Join: $hex(#6D83D1){http://discord.gg/tTu8dGN}"
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "name": "firestore",
+    "displayName":{
+        "pt_br": "Firestore",
+        "en_us": "Firestore"
+    },
+    "disabled": true
+}

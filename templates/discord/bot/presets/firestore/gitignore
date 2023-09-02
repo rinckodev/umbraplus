@@ -1,0 +1,13 @@
+package-lock.json
+node_modules
+dist
+.env
+.env.development
+
+*deprecated
+*.exe
+*.config
+*.zip
+*.sqlite
+*firebase.json
+*firebase.development.json

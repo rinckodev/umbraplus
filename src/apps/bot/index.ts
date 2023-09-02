@@ -1,53 +1,39 @@
 import clack from "@clack/prompts";
 import { style } from "@opentf/cli-styles";
-import ck from "chalk";
 import spawn from "cross-spawn";
 import fs from "fs-extra";
-import { PromptModule } from "inquirer";
 import path from "node:path";
 import { cwd } from "node:process";
 import { PresetProperties, ProgramProperties } from "../../@types/globals";
-import { S_BAR } from "../../constants";
-import { brBuilder, editJson, getNpmName, validateNpmName } from "../../helpers";
+import { brBuilder, checkCancel, editJson, getNpmName, validateNpmName } from "../../helpers";
 import langs from "./bot.lang.json";
 
-export async function bot(properties: ProgramProperties, prompt: PromptModule){
+export async function bot(properties: ProgramProperties){
     const { lang, programRootDir } = properties;
 
     const templatesPath = path.join(programRootDir, "templates/discord/bot");
-
-    let { projectName } = await prompt<{ projectName: string }>({
-        name: "projectName",
-        prefix: style(`${segment()} 📂`),
-        message: style(langs.projectName.message[lang]),
-        type: "input",
-        transformer(input: string) {
-            const npmName = getNpmName(input);
-            const validation = validateNpmName(npmName);
-
-            if (validation.valid){
-                return ck.green(input);
-            }
-            return ck.red(input);
-        },
-        validate(input: string) {
+    
+    let projectName = checkCancel(await clack.text({
+        message: langs.projectName.message[lang],
+        placeholder: langs.projectName.placeholder[lang],
+        validate(input) {
             const npmName = getNpmName(input);
             const validation = validateNpmName(npmName);
             if (!input){
                 return style(langs.projectName.emptyWarn[lang]);
             }
             if (validation.valid){
-                return true
+                return
             }
-            return ck.red(brBuilder(...(validation.problems || [])));
+            return style(`$r{${brBuilder(...(validation.problems || []))}}`);
         },
-    })
+    }))
 
     properties.destinationPath = path.resolve(projectName);
     const isDestinationCwd = properties.destinationPath == cwd();
     if (isDestinationCwd) projectName = path.basename(cwd());
 
-    const presetChoices: Array<{ name: string, value: string, disabled: boolean }> = []
+    const presetOptions: Array<{ label: string, value: string, hint?: string }> = []
 
     for(const presetPath of fs.readdirSync(path.join(templatesPath, "presets"))){
         const presetPropertiesPath = path.join(templatesPath, "presets", presetPath, "properties.json")
@@ -55,38 +41,27 @@ export async function bot(properties: ProgramProperties, prompt: PromptModule){
         if (fs.existsSync(path.join(presetPropertiesPath))){
             const { disabled, displayName, name }: PresetProperties = (await import(presetPropertiesPath))?.default
 
-            const display = disabled 
-            ? style(`$hex(#505050){${displayName[lang]}`) 
-            : style(displayName[lang]);
-
-            presetChoices.push({ name: display, value: name, disabled })
+            if (!disabled) presetOptions.push({ label: displayName[lang], value: name })
         }
     }
 
-    const { preset } = await prompt<{ preset: string }>({
-        name: "preset",
-        type: "list",
-        prefix: style(`${segment()} 🗃️`),
-        default: "default",
-        message: style(langs.presets[lang]),
-        choices: presetChoices
-    })
+    const preset = checkCancel<string>(await clack.select({
+        message: langs.presets[lang],
+        options: presetOptions,
+        initialValue: presetOptions[0].value,
+    }))
 
-    const { addExamples } = await prompt<{ addExamples: boolean }>({
-        name: "addExamples",
-        prefix: style(`${segment()} 📄`),
+    const addExamples = checkCancel(await clack.confirm({
         message: style(langs.examples[lang]),
-        type: "confirm",
-        default: true,
-    })
+        active: langs.defaults.confirm.active[lang],
+        inactive: langs.defaults.confirm.inactive[lang]
+    }))
 
-    const { installDependencies } = await prompt<{ installDependencies: boolean }>({
-        name: "installDependencies",
-        prefix: style(`${segment()} 📦`),
+    const installDependencies = checkCancel(await clack.confirm({
         message: style(langs.dependencies[lang]),
-        type: "confirm",
-        default: true,
-    })
+        active: langs.defaults.confirm.active[lang],
+        inactive: langs.defaults.confirm.inactive[lang]
+    }))
 
     const presetPath = path.join(templatesPath, "presets", preset)
 
@@ -109,7 +84,16 @@ export async function bot(properties: ProgramProperties, prompt: PromptModule){
         errorOnExist: false, overwrite: true,
         filter: async (srcPath) => {
             const srcBasename = path.basename(srcPath)
-            const ignoreItems = ["node_modules", "package-lock.json", ".env.development", "dist"]
+            const ignoreItems = [
+                "node_modules", 
+                "package-lock.json", 
+                "dist"
+            ];
+            const ignoreExtensions = [
+                ".env.development",
+                ".development.json",
+            ]
+            if (ignoreExtensions.some(ext => srcBasename.endsWith(ext))) return false;
             if (ignoreItems.includes(srcBasename)) return false;
             return true;
         }
@@ -154,15 +138,20 @@ export async function bot(properties: ProgramProperties, prompt: PromptModule){
             cwd: destinationPath, 
         });
 
+        let loop = 0;
+        const emojis = ["😐","🙂","😐","🥱","😴","😑"]
+        const timer = setInterval(() => {
+            if (loop >= emojis.length) loop = 0;
+            spinner.message(`${emojis[loop]} ${langs.installing[lang]}`)
+            loop++;
+        }, 3000)
+
         child.on("exit", () => {
-            spinner.stop(langs.installed[lang]);
+            clearInterval(timer);
+            spinner.stop("😃 " + langs.installed[lang]);
             done()
         })
         return;
     }
     done();
-}
-
-function segment(){
-    return `$hex(#666666){${S_BAR}}`
 }

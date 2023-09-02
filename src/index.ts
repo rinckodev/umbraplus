@@ -2,22 +2,19 @@
 import { Languages, PackageJson, ProgramProperties } from "./@types/globals";
 import { Command, Option } from "commander";
 import path from "node:path";
-import { readJson } from "./helpers";
-import { PromptModule, createPromptModule } from "inquirer";
+import { brBuilder, checkCancel, readJson } from "./helpers";
 import langs from "./program.lang.json";
 import { bot } from "./apps/bot";
-import { brBuilder } from "./helpers/format";
 import { style } from "@opentf/cli-styles";
 import clack from "@clack/prompts";
-import { S_STEP_ACTIVE } from "./constants";
-
-const prompt = createPromptModule()
+import { preferences } from "./other/preferences";
+import { info } from "./other/information";
+import { getLastestVersion, isOutdated } from "./helpers/package";
 
 async function main(){
     const packageJson = readJson<PackageJson>(path.join(__dirname, "../package.json"))
     const properties: ProgramProperties = { lang: "en_us", programRootDir: path.join(__dirname, "..") }
     const programCommand = new Command(packageJson.name)
-    .version(packageJson.version)
     .version(packageJson.version)
     // .arguments("[project-directory]")
     // .usage(`<project-directory>" [flags]`)
@@ -31,62 +28,45 @@ async function main(){
     const options = programCommand.opts<{ lang?: Languages }>()
     if (options.lang) properties.lang = options.lang;
     const { lang } = properties;
-
     
     clack.intro(style(`${langs.welcome[lang]} 📦 $und.hex(#505050){${packageJson.version}}`))
+    
+    const lastVersion = await getLastestVersion();
+    if (lastVersion && isOutdated(packageJson.version, lastVersion)){
+        clack.log.warn(brBuilder(
+            langs.outdated[lang][0] + ` @${lastVersion}`,
+            langs.outdated[lang][1],
+        ));
+    }
 
-    const { program } = await prompt<{ program: string }>({
-        name: "program",
-        message: style(langs.select[lang] + "\n"),
-        prefix: style(`$hex(#00B191){${S_STEP_ACTIVE}}`),
-        type: "list",
-        choices: [
-            {
-                name: style(langs.options.discodbot[lang]),
-                checked: true,
-                value: "bot",
-            },
-            {
-                name: style(langs.options.richpresence[lang]),
-                value: "richpresence",
-                disabled: true,
-            },
-            { type: "separator" },
-            {
-                name: style(langs.options.information[lang]),
-                value: "info",
-            },
-            {
-                name: style(langs.options.leave[lang]),
-                value: "leave",
-            }
-        ],
-    })
+    const program = checkCancel<string>(await clack.select({
+        message: langs.select[lang],
+        options: [
+            { label: langs.options.discodbot[lang], value: "bot" },
+            // { label: langs.options.richpresence[lang], value: "richpresence" },
+            // { label: langs.options.preferences[lang], value: "preferences" },
+            { label: langs.options.information[lang], value: "info" },
+            { label: langs.options.leave[lang], value: "leave" },
+        ]
+    }))
     
     const programs = {
-        bot,
-        info(_properties: ProgramProperties, _prompt: PromptModule){
-            clack.note(
-                style(brBuilder(...langs.information.notes[lang])),
-                langs.information.title[lang]
-            )
-            clack.outro(style(langs.information.outro[lang]));
+        bot, preferences, info,
+        leave(properties: ProgramProperties){
+            clack.outro(style(langs.leave[properties.lang]))            
             process.exit(0)
         },
-        leave(_properties: ProgramProperties, _prompt: PromptModule){
-            clack.outro(style(langs.leave[lang]))            
-            process.exit(0)
-        },
-        invalid(_properties: ProgramProperties, _prompt: PromptModule){
+        invalid(properties: ProgramProperties){
+
         },
     }
 
     const exec = programs[program as keyof typeof programs]
     if (!exec) {
-        programs.invalid(properties, prompt);
+        programs.invalid(properties);
         return;
     };
-    exec(properties, prompt)
+    exec(properties)
 }
 main()
 .catch(err => {
