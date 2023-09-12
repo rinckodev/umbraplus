@@ -12,8 +12,7 @@
         "firestore": "Firebase",
         "mongodb": "Database",
         "mysql": "Database",
-        "quickdb": "Json",
-        "vscode": "Vscode"
+        "quickdb": "Json"
     },
     "material-icon-theme.files.associations": {
         "config.json": "Raml",

@@ -1,8 +1,8 @@
 import { Event } from "@discord/base";
 
-export default new Event({
+new Event({
     name: "messageDelete",
-    run(client, message) {
+    run(message) {
         console.log(`[deleted message] ${message.author?.username}: ${message.content}`);
     },
 });

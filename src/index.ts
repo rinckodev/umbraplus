@@ -1,8 +1,7 @@
 #!/usr/bin/env node
-import { Languages, PackageJson, ProgramProperties } from "./@types/globals";
 import { Command, Option } from "commander";
 import path from "node:path";
-import { brBuilder, checkCancel, readJson } from "./helpers";
+import { checkCancel, readJson } from "./helpers";
 import langs from "./program.lang.json";
 import { bot } from "./apps/bot";
 import { style } from "@opentf/cli-styles";
@@ -10,6 +9,8 @@ import clack from "@clack/prompts";
 import { preferences } from "./other/preferences";
 import { info } from "./other/information";
 import { getLastestVersion, isOutdated } from "./helpers/package";
+import { PackageJson } from "./@types/packageJson";
+import { textReplacer } from "@magicyan/core";
 
 async function main(){
     const packageJson = readJson<PackageJson>(path.join(__dirname, "../package.json"))
@@ -30,13 +31,14 @@ async function main(){
     const { lang } = properties;
     
     clack.intro(style(`${langs.welcome[lang]} 📦 $und.hex(#505050){${packageJson.version}}`))
-    
+
     const lastVersion = await getLastestVersion();
     if (lastVersion && isOutdated(packageJson.version, lastVersion)){
-        clack.log.warn(brBuilder(
-            langs.outdated[lang][0] + ` @${lastVersion}`,
-            langs.outdated[lang][1],
-        ));
+        clack.log.warn(
+            textReplacer(langs.outdated[lang], {
+                "var(version)": lastVersion
+            })
+        );
     }
 
     const program = checkCancel<string>(await clack.select({
@@ -55,17 +57,11 @@ async function main(){
         leave(properties: ProgramProperties){
             clack.outro(style(langs.leave[properties.lang]))            
             process.exit(0)
-        },
-        invalid(properties: ProgramProperties){
-
-        },
+        }
     }
 
     const exec = programs[program as keyof typeof programs]
-    if (!exec) {
-        programs.invalid(properties);
-        return;
-    };
+    if (!exec) programs.leave(properties);
     exec(properties)
 }
 main()

@@ -4,5 +4,5 @@
         "pt_br": "Padrão",
         "en_us": "Default"
     },
-    "disabled": false
+    "enabled": true
 }

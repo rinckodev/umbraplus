@@ -1,10 +1,9 @@
 import { Command } from "@/discord/base";
-import { createRow } from "@/discord/functions";
-import { hexToRgb } from "@/functions";
 import { settings } from "@/settings";
+import { createRow, hexToRgb } from "@magicyan/discord";
 import { ApplicationCommandOptionType, ApplicationCommandType, ButtonBuilder, ButtonStyle, EmbedBuilder, codeBlock } from "discord.js";
 
-export default new Command({
+new Command({
     name: "register",
     description: "Register system command",
     type: ApplicationCommandType.ChatInput,
@@ -16,7 +15,7 @@ export default new Command({
             type: ApplicationCommandOptionType.Subcommand,
         }
     ],
-    async run({ interaction }) {
+    async run(interaction) {
         const { options, channel } = interaction;
 
         if (!channel?.send){

@@ -1,7 +1,7 @@
 import { Component } from "@/discord/base";
 import { ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
 
-export default new Component({
+new Component({
     customId: "register-start-button",
     type: "Button",
     async run(interaction) {

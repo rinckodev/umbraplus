@@ -1,8 +1,8 @@
 import { Event } from "@discord/base";
 
-export default new Event({
+new Event({
     name: "guildMemberRemove",
-    run(client, member) {
+    run(member) {
         console.log(`Bye ${member.user.username}`);
     },
 });

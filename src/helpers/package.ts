@@ -1,7 +1,6 @@
-import clack from "@clack/prompts";
 import path from "node:path";
 import { readJson } from "./files";
-import { Languages, PackageJson } from "../@types/globals";
+import { PackageJson } from "../@types/packageJson";
 
 const packageJson = readJson<PackageJson>(path.join(__dirname, "../../package.json"))
 

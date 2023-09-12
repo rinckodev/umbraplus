@@ -1,9 +1,8 @@
-import { ExtendedClient } from "@discord/base";
-import { onCrash } from "./functions";
-import "./database";
+import { createClient } from "./discord/base";
+import { log } from "./settings";
 
-const client = new ExtendedClient();
+const client = createClient();
 client.start();
 
-process.on("uncaughtException", onCrash);
-process.on("unhandledRejection", onCrash);
+process.on("uncaughtException", log.error);
+process.on("unhandledRejection", log.error);

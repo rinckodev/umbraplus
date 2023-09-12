@@ -1,12 +1,17 @@
-import { ClientEvents } from "discord.js";
-import { ExtendedClient } from "./ExtendedClient";
+import { log } from "@/settings";
+import ck from "chalk";
+import { ClientEvents, Collection } from "discord.js";
 
-export type EventData<Key extends keyof ClientEvents> = {
+type EventData<Key extends keyof ClientEvents> = {
     name: Key,
     once?: boolean,
-    run(client: ExtendedClient<true>, ...args: ClientEvents[Key]): any,
+    run(...args: ClientEvents[Key]): any,
 }
 
 export class Event<Key extends keyof ClientEvents> {
-    constructor(public data: EventData<Key>){}
+    public static all: Collection<string, EventData<keyof ClientEvents>> = new Collection();
+    constructor(data: EventData<Key>){
+        log.successEvent(ck.green(`${ck.cyan.underline(data.name)} has been successfully registered!`));
+        Event.all.set(data.name, data);
+    }
 }

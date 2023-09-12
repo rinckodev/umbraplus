@@ -1,12 +1,12 @@
-import { sleep } from "@/functions";
+import { log } from "@/settings";
 import { Event } from "@discord/base";
+import { sleep } from "@magicyan/discord";
 import ck from "chalk";
 
-export default new Event({
-    name: "ready",
-    once: true,
-    async run(client) {
+new Event({
+    name: "ready", once: true, 
+    async run() {
         await sleep(2000);
-        console.log(ck.greenBright.underline("\n✓ Everything is working correctly!"));
+        log.success(ck.green("Everything is working correctly!"));
     },
 });

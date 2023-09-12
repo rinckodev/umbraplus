@@ -1,7 +1,7 @@
-import { settings } from "@/settings";
-import { brBuilder, createEmbedAuthor, hexToRgb } from "@magicyan/discord";
 import { ApplicationCommandType, EmbedBuilder, hyperlink } from "discord.js";
 import { Command } from "../base";
+import { brBuilder, createEmbedAuthor, hexToRgb } from "@magicyan/discord";
+import { settings } from "@/settings";
 
 new Command({
     name: "example", dmPermission,

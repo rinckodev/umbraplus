@@ -4,14 +4,8 @@
         "en_us":"$hex(#00B191){ ✨ Welcome to Umbra Plus CLI }"
     },
     "outdated":{
-        "pt_br": [
-            "Uma versão mais recente está disponível!",
-            "Use npm install -g umbraplus para atualizar"
-        ],
-        "en_us":[
-            "A newer version is available!",
-            "Use npm install -g umbraplus to update"
-        ]
+        "pt_br": "Uma versão mais recente está disponível! var(version) \nUse npx umbraplus@latest",
+        "en_us": "A newer version is available! var(version) \nUse npx umbraplus@latest"
     },
     "select":{
         "pt_br":"Selecione alguma das opções abaixo",

@@ -1,5 +1,5 @@
 import clack from "@clack/prompts";
-import { ProgramProperties } from "../../@types/globals";
+// import { ProgramProperties } from "../../@types/globals";
 import { checkCancel } from "../../helpers";
 
 export async function preferences(properties: ProgramProperties) {

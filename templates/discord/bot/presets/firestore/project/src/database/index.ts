@@ -7,14 +7,19 @@ import { UserDocument } from "./documents/UserDocument";
 firebase.initializeApp({ credential: credential.cert(firebaseAccount)});
 
 const db = {
-    users: typesaurs.collection<UserDocument>("tempusers"),
+    users: typesaurs.collection<UserDocument>("userscollection"),
+    usersKeys: typesaurs.collection<Required<UserDocument>>("userscollection"),
     /**
      *  yourCollectionName: typesaurs.collection<YourCollectionDocument>("yourCollectionName"),
      *  examples: 
      *  guilds: typesaurs.collection<GuildDocument>("guilds"),
      *  logs: typesaurs.collection<LogDocument>("logs"),
      */
-    ...typesaurs
+    ...typesaurs,
+    async get<Model>(collection: typesaurs.Collection<Model>, id: string){
+        return (await typesaurs.get<Model>(collection, id))?.data;
+    },
+    getFull: typesaurs.get
 };
 
 export { db };

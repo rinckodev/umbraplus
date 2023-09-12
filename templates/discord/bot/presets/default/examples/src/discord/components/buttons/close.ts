@@ -1,11 +1,11 @@
 import { Component } from "@/discord/base";
-import { onCrash } from "@/functions";
+import { log } from "@/settings";
 
-export default new Component({
+new Component({
     customId: "global-close-button",
     type: "Button", cache: "cached",
     async run(interaction) {
         await interaction.deferUpdate();
-        interaction.message.delete().catch(onCrash);
+        interaction.message.delete().catch(log.error);
     },
 });

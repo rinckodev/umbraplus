@@ -4,9 +4,9 @@ import spawn from "cross-spawn";
 import fs from "fs-extra";
 import path from "node:path";
 import { cwd } from "node:process";
-import { PresetProperties, ProgramProperties } from "../../@types/globals";
-import { brBuilder, checkCancel, editJson, getNpmName, validateNpmName } from "../../helpers";
+import { checkCancel, editJson, getNpmName, validateNpmName } from "../../helpers";
 import langs from "./bot.lang.json";
+import { brBuilder } from "@magicyan/core";
 
 export async function bot(properties: ProgramProperties){
     const { lang, programRootDir } = properties;
@@ -39,9 +39,9 @@ export async function bot(properties: ProgramProperties){
         const presetPropertiesPath = path.join(templatesPath, "presets", presetPath, "properties.json")
 
         if (fs.existsSync(path.join(presetPropertiesPath))){
-            const { disabled, displayName, name }: PresetProperties = (await import(presetPropertiesPath))?.default
+            const { enabled, displayName, name }: PresetProperties = (await import(presetPropertiesPath))?.default
 
-            if (!disabled) presetOptions.push({ label: displayName[lang], value: name })
+            if (enabled) presetOptions.push({ label: displayName[lang], value: name })
         }
     }
 
@@ -71,7 +71,7 @@ export async function bot(properties: ProgramProperties){
         features: {
             guide: path.join(templatesPath, "features", "guide"),
             // server: path.join(templatesPath, "features", "server"),
-            snippets: path.join(templatesPath, "features", "snippets")
+            vscode: path.join(templatesPath, "features", "vscode")
         },
         template: {
             project: path.join(presetPath, "project"),
@@ -105,7 +105,7 @@ export async function bot(properties: ProgramProperties){
         return;
     }
     
-    await fs.copy(paths.features.snippets, path.join(destinationPath, "/.vscode"))
+    await fs.copy(paths.features.vscode, path.join(destinationPath, "/.vscode"))
     await fs.copy(paths.features.guide, destinationPath)
     await fs.copy(paths.template.gitignore, path.join(destinationPath, ".gitignore"))
     await editJson({

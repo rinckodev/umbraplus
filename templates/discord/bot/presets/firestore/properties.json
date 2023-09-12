@@ -1,8 +1,8 @@
 {
     "name": "firestore",
     "displayName":{
-        "pt_br": "Firestore",
-        "en_us": "Firestore"
+        "pt_br": "Bot com banco de dados Firestore",
+        "en_us": "Bot with Firestore database"
     },
-    "disabled": true
+    "enabled": false
 }

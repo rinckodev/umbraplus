@@ -1,17 +1,15 @@
-import { createRow } from "@/discord/functions";
-import { hexToRgb } from "@/functions";
 import { settings } from "@/settings";
 import { Command, Component } from "@discord/base";
+import { createRow, hexToRgb } from "@magicyan/discord";
 import { ApplicationCommandType, ButtonBuilder, ButtonStyle, EmbedBuilder } from "discord.js";
 
-export default new Command({
-    name: "ping",
+new Command({
+    name: "ping", dmPermission,
     description: "reply with pong",
-    dmPermission: false,
     type: ApplicationCommandType.ChatInput,
-    async run({ interaction }){
+    async run(interaction){
 
-        interaction.reply({  ephemeral: true, 
+        interaction.reply({ ephemeral, 
             embeds: [
                 new EmbedBuilder({ 
                     description: "pong", 
@@ -25,21 +23,20 @@ export default new Command({
             ]
         });
     },
-    components: [
-        new Component({
-            customId: "ping-button", type: "Button", cache: "cached",
-            async run(interaction) {
-
-                const { message: { embeds: [embed] }} = interaction;
-
-                const description = embed.description == "ping" ? "pong" : "ping";
-
-                interaction.update({ embeds: [
-                    new EmbedBuilder({ description, 
-                        color: hexToRgb(settings.colors.theme.primary) 
-                    })
-                ]});
-            },
-        })
-    ],
 });
+
+new Component({
+    customId: "ping-button", type: "Button", cache: "cached",
+    async run(interaction) {
+
+        const { message: { embeds: [embed] }} = interaction;
+
+        const description = embed.description == "ping" ? "pong" : "ping";
+
+        interaction.update({ embeds: [
+            new EmbedBuilder({ description, 
+                color: hexToRgb(settings.colors.theme.primary) 
+            })
+        ]});
+    },
+})

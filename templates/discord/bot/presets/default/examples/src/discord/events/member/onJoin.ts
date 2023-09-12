@@ -1,8 +1,8 @@
 import { Event } from "@discord/base";
 
-export default new Event({
+new Event({
     name: "guildMemberAdd",
-    run(client, member) {
+    run(member) {
         console.log(`New member ${member.user.username}`);
     },
 });

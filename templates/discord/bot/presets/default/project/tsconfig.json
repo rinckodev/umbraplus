@@ -1,13 +1,12 @@
 {
   "compilerOptions": {
-    "lib": ["ESNext", "DOM"],
+    "lib": ["ESNext"],
     "removeComments": true,
     "rootDir": "./src",
     "outDir": "dist",
     "target": "ESNext",
     "module": "CommonJS",
     "moduleResolution": "Node",
-    "sourceMap": false,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
@@ -16,8 +15,6 @@
     "skipDefaultLibCheck": true,
     "resolveJsonModule": true,
     "importHelpers": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
     "baseUrl": ".",
     "paths": {
       "@/*":["./src/*"],
@@ -30,13 +27,10 @@
     ]
   },
   "include": [
-    "settings",
     "src"
   ],
   "exclude": [
     "node_modules",
     "**/*.spec.ts",
-    "firebase.json",
-    "tsconfig.json"
   ]
 }

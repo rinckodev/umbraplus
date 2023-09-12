@@ -1,4 +1,6 @@
-import { ButtonInteraction, CacheType, ChannelSelectMenuInteraction, MentionableSelectMenuInteraction, ModalSubmitInteraction, RoleSelectMenuInteraction, StringSelectMenuInteraction, UserSelectMenuInteraction } from "discord.js";
+import { log } from "@/settings";
+import ck from "chalk";
+import { ButtonInteraction, CacheType, ChannelSelectMenuInteraction, Collection, ComponentType, MentionableSelectMenuInteraction, ModalSubmitInteraction, RoleSelectMenuInteraction, StringSelectMenuInteraction, UserSelectMenuInteraction } from "discord.js";
 
 type ComponentProps<Cached extends CacheType = CacheType> = {
     type: "Button",
@@ -23,11 +25,19 @@ type ComponentProps<Cached extends CacheType = CacheType> = {
     run(interaction: ModalSubmitInteraction<Cached>): any;
 }
 
-export type ComponentData<Cached extends CacheType = CacheType> = ComponentProps<Cached> & {
+type ComponentData<Cached extends CacheType = CacheType> = ComponentProps<Cached> & {
     cache?: Cached,
     customId: string,
 }
 
 export class Component<Cached extends CacheType = CacheType> {
-    constructor(public readonly data: ComponentData<Cached>){}
+    public static all: Collection<string, ComponentData> = new Collection();
+    public static find<T extends ComponentData["type"]>(customId: string, type: T){
+        const c =  Component.all.find(c => c.customId === customId && c.type == type);
+        return c as ComponentData & { type: T } | undefined;
+    }
+    constructor(data: ComponentData<Cached>){
+        log.successComponent(ck.green(`${ck.cyan.underline(data.customId)} has been successfully saved!`));
+        Component.all.set(data.customId, data);
+    }
 }

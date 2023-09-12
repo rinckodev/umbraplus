@@ -1,6 +1,6 @@
 import { Component } from "@/discord/base";
 
-export default new Component({
+new Component({
     customId: "job-select",
     cache: "cached",
     type: "StringSelect",
