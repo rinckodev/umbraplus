@@ -1,2 +1,7 @@
 src
 /.vscode
+node_modules
+*development.json
+*.env.development
+
+*node_modules
