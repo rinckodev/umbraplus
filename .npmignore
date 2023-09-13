@@ -1,6 +1,8 @@
 src
 /.vscode
 node_modules
+*old
+*deprecated
 *development.json
 *.env.development
 
