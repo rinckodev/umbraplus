@@ -1,12 +1,11 @@
 {
-  "name": "awesomebotbasev14",
+  "name": "project",
   "version": "1.0.0",
   "main": "dist/index.js",
   "scripts": {
     "start": "node .",
     "dev": "ts-node -r tsconfig-paths/register --transpiler sucrase/ts-node-plugin src/index.ts",
-    "build": "tsc && tscpaths -p tsconfig.json -s ./src -o ./dist",
-    "zip": "ts-node scripts/zip.ts"
+    "build": "tsc && tscpaths -p tsconfig.json -s ./src -o ./dist"
   },
   "keywords": [
     "bot",
@@ -31,7 +30,6 @@
     "eslint": "^8.46.0",
     "firebase-admin": "^11.10.1",
     "glob": "^10.3.3",
-    "jszip": "^3.10.1",
     "signale": "^1.4.0",
     "tslib": "^2.5.3",
     "typesaurus": "^7.2.0"

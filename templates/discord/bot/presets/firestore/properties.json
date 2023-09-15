@@ -4,5 +4,5 @@
         "pt_br": "Bot com banco de dados Firestore",
         "en_us": "Bot with Firestore database"
     },
-    "enabled": false
+    "enabled": true
 }

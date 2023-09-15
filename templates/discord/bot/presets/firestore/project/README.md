@@ -5,6 +5,8 @@ This is a very complete discord bot base created by [@rinckodev](https://github.
 
 [Setup your application](docs/setup-your-application.md)
 
+[Create firestore database](docs/create-firestore-database.md)
+
 ## Scripts
 ```
 npm run dev

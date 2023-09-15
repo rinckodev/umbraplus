@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
-import { existsSync } from "fs";
-import { resolve } from "path";
+import { existsSync } from "node:fs";
+import { resolve } from "node:path";
 import { Signale } from "signale";
 import settings from "./settings.json";
 import "./constants";

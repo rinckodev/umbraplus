@@ -1,29 +1,22 @@
+import { db } from "@/database";
 import { Command, Component } from "@/discord/base";
 import { settings } from "@/settings";
 import { createModalInput, hexToRgb } from "@magicyan/discord";
-import { ApplicationCommandOptionType, ApplicationCommandType, Attachment, AttachmentBuilder, Collection, EmbedBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, codeBlock } from "discord.js";
-
-const members: Collection<string, Attachment> = new Collection();
+import { ApplicationCommandType, EmbedBuilder, ModalBuilder, TextInputStyle, codeBlock } from "discord.js";
 
 new Command({
     name: "post",
     description: "Post command",
     type: ApplicationCommandType.ChatInput,
     dmPermission,
-    options: [
-        {
-            name: "image",
-            description: "Image",
-            type: ApplicationCommandOptionType.Attachment,
-            required: true,
+    async run(interaction) {
+        const { user } = interaction;
+
+        const userData = await db.get(db.users, user.id);
+        if (!userData){
+            interaction.reply({ ephemeral, content: "Not registered! Use /register" });
+            return;
         }
-    ],
-    run(interaction) {
-        const { member, options } = interaction;
-
-        const image = options.getAttachment("image", true);
-
-        members.set(member.id, image);
 
         interaction.showModal(new ModalBuilder({
             customId: "post-modal",
@@ -40,6 +33,14 @@ new Command({
                     label: "Description",
                     style: TextInputStyle.Paragraph,
                     required: true
+                }),
+                createModalInput({
+                    customId: "post-tags-input",
+                    label: "Tags",
+                    maxLength: 120,
+                    placeholder: "Separate tags using commas \",\"",
+                    style: TextInputStyle.Paragraph,
+                    required: false
                 })
             ]
         }));
@@ -49,19 +50,18 @@ new Command({
 new Component({
     customId: "post-modal", type: "Modal", cache: "cached",
     async run(interaction) {
-        const { member, fields, channel } = interaction;
-        
-        const image = members.get(member.id);
-        if (!image){
-            interaction.reply({
-                ephemeral: true,
-                content: "Initial image not found! Use /post again"
-            });
+        const { user, fields, channel } = interaction;
+        const userData = await db.get(db.users, user.id);
+        if (!userData){
+            interaction.reply({ ephemeral, content: "Not registered! Use /register" });
             return;
         }
         
         const title = fields.getTextInputValue("post-title-input");
         const description = fields.getTextInputValue("post-description-input");
+        const rawTags = fields.getTextInputValue("post-tags-input");
+
+        const tags = rawTags.trim().split(",");
 
         await interaction.deferReply({ ephemeral });
 
@@ -70,19 +70,28 @@ new Component({
                 new EmbedBuilder({
                     title, description, timestamp: new Date(),
                     color: hexToRgb(settings.colors.theme.success),
-                    image: { url: "attachment://image.png" }
+                    fields: tags.length > 1 ? [
+                        { name: "Tags", value: tags.map(tag => `${tag}`).join(" ") }
+                    ] : []
                 })
-            ],
-            files:[
-                new AttachmentBuilder(image.url, {name: "image.png"})
             ]
         })
         .then(message => {
             interaction.editReply({content: `New post ${message.url}`});
+
+            const posts = userData.posts || [];
+
+            posts.push({
+                title, description, tags: tags.length > 1 ? tags : [],
+                createdAt: new Date(),
+            });
+
+            db.update(db.usersKeys, user.id, [
+                db.field("posts", posts)
+            ]);
         })
         .catch(err => {
             interaction.editReply({content: `Error: ${codeBlock(err)}`});
         });
-        members.delete(member.id);
     }, 
 });

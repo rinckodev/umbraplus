@@ -1,12 +1,11 @@
-import settings from "./settings.json";
 import dotenv from "dotenv";
 import { existsSync, readFileSync } from "node:fs";
 import { resolve, basename } from "node:path";
-import { ServiceAccount } from "firebase-admin";
-import ck from "chalk";
 import { Signale } from "signale";
+import settings from "./settings.json";
 import "./constants";
-import "./firebase.json";
+import ck from "chalk";
+import { ServiceAccount } from "firebase-admin";
 
 const developmentEnvPath = resolve(__rootname, ".env.development");
 
@@ -18,9 +17,17 @@ const { parsed: parsedEnv } = dotenv.config({
     : resolve(__rootname, ".env")
 });
 
+const processEnv = { ...(parsedEnv as NodeJS.ProcessEnv), dev };
+
+const log = new Signale({ types: {
+    successComamnd: { badge: "√", color: "blue", label: "Command" },
+    successEvent: { badge: "√", color: "yellow", label: "Event" },
+    successComponent: { badge: "√", color: "cyan", label: "Component" }
+}});
+
 const firebaseAccountPath = dev 
-? resolve(__dirname, "firebase.development.json")
-: resolve(__dirname, "firebase.json");
+? resolve(__rootname, "firebase.development.json")
+: resolve(__rootname, "firebase.json");
 
 if (!existsSync(firebaseAccountPath)){
     const filename = ck.yellow(`"${basename(firebaseAccountPath)}"`);
@@ -34,12 +41,4 @@ const firebaseAccount: ServiceAccount = JSON.parse(
     readFileSync(firebaseAccountPath, {encoding: "utf-8"})
 );
 
-const processEnv = { ...(parsedEnv as NodeJS.ProcessEnv), dev };
-
-const log = new Signale({ types: {
-    successComamnd: { badge: "√", color: "blue", label: "Command" },
-    successEvent: { badge: "√", color: "yellow", label: "Event" },
-    successComponent: { badge: "√", color: "cyan", label: "Component" }
-}});
-
-export { settings, log, processEnv, firebaseAccount };
+export { log, processEnv, settings, firebaseAccount };

@@ -1,6 +1,6 @@
 import { log } from "@/settings";
 import ck from "chalk";
-import { ButtonInteraction, CacheType, ChannelSelectMenuInteraction, Collection, ComponentType, MentionableSelectMenuInteraction, ModalSubmitInteraction, RoleSelectMenuInteraction, StringSelectMenuInteraction, UserSelectMenuInteraction } from "discord.js";
+import { ButtonInteraction, CacheType, ChannelSelectMenuInteraction, Collection, MentionableSelectMenuInteraction, ModalSubmitInteraction, RoleSelectMenuInteraction, StringSelectMenuInteraction, UserSelectMenuInteraction } from "discord.js";
 
 type ComponentProps<Cached extends CacheType = CacheType> = {
     type: "Button",

@@ -1,14 +1,14 @@
 import { firebaseAccount } from "@/settings";
 import firebase, { credential } from "firebase-admin";
-import typesaurs from "typesaurus";
+import * as typesaurs from "typesaurus";
 
 import { UserDocument } from "./documents/UserDocument";
 
 firebase.initializeApp({ credential: credential.cert(firebaseAccount)});
 
 const db = {
-    users: typesaurs.collection<UserDocument>("userscollection"),
-    usersKeys: typesaurs.collection<Required<UserDocument>>("userscollection"),
+    users: typesaurs.collection<UserDocument>("users"),
+    usersKeys: typesaurs.collection<Required<UserDocument>>("users"),
     /**
      *  yourCollectionName: typesaurs.collection<YourCollectionDocument>("yourCollectionName"),
      *  examples: 

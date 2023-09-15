@@ -1,14 +1,18 @@
 interface UserPostSchema {
-    title: string,
-    description: string,
-    createdAt: Date,
+    title: string;
+    description: string;
+    createdAt: Date;
     tags: string[]
 }
 
 interface UserDocumentSchema {
-    username: string,
-    displayName: string,
-    posts: UserPostSchema[]
+    username: string;
+    displayName?: string;
+    wallet?: {
+        coins: number;
+        credits: number;
+    }
+    posts?: UserPostSchema[]
 }
 
-export type UserDocument = Partial<UserDocumentSchema>
+export type UserDocument = UserDocumentSchema
