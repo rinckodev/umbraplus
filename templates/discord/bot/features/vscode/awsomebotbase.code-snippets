@@ -5,9 +5,9 @@
 		  "new Command({",
 		  "    name: \"$1\",",
 		  "    description: \"$2\",",
-		  "    dmPermission: false,",
+		  "    dmPermission,",
 		  "    type: ApplicationCommandType.ChatInput,",
-		  "    async run({ interaction }){",
+		  "    async run(interaction){",
 		  "        ",
 		  "    }",
 		  "});"
@@ -20,7 +20,7 @@
 		  "new Command({",
 		  "    name: \"$1\",",
 		  "    description: \"$2\",",
-		  "    dmPermission: false,",
+		  "    dmPermission,",
 		  "    type: ApplicationCommandType.ChatInput,",
 		  "    options: [",
 		  "        {",
@@ -29,7 +29,7 @@
 		  "            type: ApplicationCommandOptionType.$5",
 		  "        }",
 		  "    ],",
-		  "    async run({ interaction }){",
+		  "    async run(interaction){",
 		  "        const { options } = interaction;",
 		  "        ",
 		  "    }",
@@ -42,9 +42,9 @@
 		"body": [
 		  "new Command({",
 		  "    name: \"$1\",",
-		  "    dmPermission: false,",
+		  "    dmPermission,",
 		  "    type: ApplicationCommandType.User,",
-		  "    async run({ interaction }){",
+		  "    async run(interaction){",
 		  "        ",
 		  "    }",
 		  "});"
@@ -56,9 +56,9 @@
 		"body": [
 		  "new Command({",
 		  "    name: \"$1\",",
-		  "    dmPermission: false,",
+		  "    dmPermission,",
 		  "    type: ApplicationCommandType.Message,",
-		  "    async run({ interaction }){",
+		  "    async run(interaction){",
 		  "        ",
 		  "    }",
 		  "});"

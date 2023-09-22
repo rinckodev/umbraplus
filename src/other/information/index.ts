@@ -1,7 +1,6 @@
 import clack from "@clack/prompts";
 import { style } from "@opentf/cli-styles";
 import langs from "./info.lang.json";
-import { brBuilder } from "@magicyan/core";
 
 export async function info(properties: ProgramProperties) {
     clack.note(

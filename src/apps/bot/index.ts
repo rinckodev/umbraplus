@@ -70,7 +70,6 @@ export async function bot(properties: ProgramProperties){
     const paths = {
         features: {
             guide: path.join(templatesPath, "features", "guide"),
-            // server: path.join(templatesPath, "features", "server"),
             vscode: path.join(templatesPath, "features", "vscode")
         },
         template: {

@@ -17,11 +17,6 @@ async function main(){
     const properties: ProgramProperties = { lang: "en_us", programRootDir: path.join(__dirname, "..") }
     const programCommand = new Command(packageJson.name)
     .version(packageJson.version)
-    // .arguments("[project-directory]")
-    // .usage(`<project-directory>" [flags]`)
-    // .action((projectDirectory: string) => {
-    //     properties.destinationPath = projectDirectory;
-    // })
     .addOption(new Option("-l, --lang <language>", "Selecet program language!").choices(["pt_br", "en_us"]))
     .allowUnknownOption()
     .parse(process.argv);
@@ -45,8 +40,6 @@ async function main(){
         message: langs.select[lang],
         options: [
             { label: langs.options.discodbot[lang], value: "bot" },
-            // { label: langs.options.richpresence[lang], value: "richpresence" },
-            // { label: langs.options.preferences[lang], value: "preferences" },
             { label: langs.options.information[lang], value: "info" },
             { label: langs.options.leave[lang], value: "leave" },
         ]
