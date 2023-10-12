@@ -1,0 +1,32 @@
+{
+  "name": "awsome-bot-base",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "node .",
+    "dev": "ts-node -r tsconfig-paths/register --transpiler sucrase/ts-node-plugin src/index.ts",
+    "build": "tsc && tscpaths -p tsconfig.json -s ./src -o ./dist"
+  },
+  "keywords": ["bot", "discord"],
+  "license": "ISC",
+  "devDependencies": {
+    "@types/signale": "^1.4.5",
+    "@typescript-eslint/eslint-plugin": "^6.7.5",
+    "@typescript-eslint/parser": "^6.7.5",
+    "sucrase": "^3.34.0",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.2.0",
+    "tscpaths": "^0.0.9",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "@magicyan/discord": "^1.0.6",
+    "chalk": "^4.1.2",
+    "discord.js": "^14.13.0",
+    "dotenv": "^16.3.1",
+    "eslint": "^8.51.0",
+    "glob": "^10.3.10",
+    "signale": "^1.4.0",
+    "tslib": "^2.6.2"
+  }
+}

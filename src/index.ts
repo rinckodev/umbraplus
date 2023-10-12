@@ -1,64 +1,70 @@
 #!/usr/bin/env node
 import { Command, Option } from "commander";
-import path from "node:path";
-import { checkCancel, readJson } from "./helpers";
-import langs from "./program.lang.json";
-import { bot } from "./apps/bot";
-import { style } from "@opentf/cli-styles";
-import clack from "@clack/prompts";
-import { preferences } from "./other/preferences";
-import { info } from "./other/information";
-import { getLastestVersion, isOutdated } from "./helpers/package";
+import { checkCancel, getLastestVersion, isOutdated, readJson } from "./helpers";
 import { PackageJson } from "./@types/packageJson";
+import { join } from "node:path";
+import langs from "./lang.json";
+import { style } from "@opentf/cli-styles";
+import { Signale } from "signale";
 import { textReplacer } from "@magicyan/core";
+import { botApp } from "./apps/bot";
+import { intro, outro, select } from "@clack/prompts";
+
+const log = new Signale({
+    config: {
+        displayLabel: false,
+    }
+})
+
+export interface AppOptions {
+    language: Languages;
+    rootname: string;
+}
 
 async function main(){
-    const packageJson = readJson<PackageJson>(path.join(__dirname, "../package.json"))
-    const properties: ProgramProperties = { lang: "en_us", programRootDir: path.join(__dirname, "..") }
-    const programCommand = new Command(packageJson.name)
+    const packageJson = readJson<PackageJson>(join(__dirname, "../package.json"))
+    
+    const program = new Command(packageJson.name)
     .version(packageJson.version)
-    .addOption(new Option("-l, --lang <language>", "Selecet program language!").choices(["pt_br", "en_us"]))
+    .addOption(
+        new Option("-l, --lang <language>", "Selecet program language!")
+        .choices(["pt_br", "en_us"])
+    )
     .allowUnknownOption()
     .parse(process.argv);
 
-    const options = programCommand.opts<{ lang?: Languages }>()
-    if (options.lang) properties.lang = options.lang;
-    const { lang } = properties;
-    
-    clack.intro(style(`${langs.welcome[lang]} 📦 $und.hex(#505050){${packageJson.version}}`))
+    const language: Languages = program.opts().lang || "en_us";
+
+    intro(style(`${langs.welcome[language]} 📦 $und.hex(#505050){${packageJson.version}}`))
 
     const lastVersion = await getLastestVersion();
+    
     if (lastVersion && isOutdated(packageJson.version, lastVersion)){
-        clack.log.warn(
-            textReplacer(langs.outdated[lang], {
-                "var(version)": lastVersion
-            })
-        );
+        log.warn(textReplacer(langs.outdated[language], {
+            "var(version)": lastVersion
+        }));
     }
 
-    const program = checkCancel<string>(await clack.select({
-        message: langs.select[lang],
+    const selectedApp = checkCancel<string>(await select({
+        message: langs.select[language],
         options: [
-            { label: langs.options.discodbot[lang], value: "bot" },
-            { label: langs.options.information[lang], value: "info" },
-            { label: langs.options.leave[lang], value: "leave" },
+            { label: langs.options.discodbot[language], value: "bot" },
+            { label: langs.options.information[language], value: "info" },
+            { label: langs.options.leave[language], value: "leave" },
         ]
     }))
     
-    const programs = {
-        bot, preferences, info,
-        leave(properties: ProgramProperties){
-            clack.outro(style(langs.leave[properties.lang]))            
-            process.exit(0)
+    const appOptions = { language, rootname: join(__dirname, "..") };
+
+    switch(selectedApp){
+        case "bot":{
+            botApp(appOptions);
+            return;
+        }
+        case "leave":{
+            outro(style(langs.leave[language]))            
+            process.exit(0);
         }
     }
-
-    const exec = programs[program as keyof typeof programs]
-    if (!exec) programs.leave(properties);
-    exec(properties)
 }
-main()
-.catch(err => {
-    console.log(err)
-    process.exit(0)
-})
+main();

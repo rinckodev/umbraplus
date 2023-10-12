@@ -6,8 +6,9 @@ interface ProgramProperties {
     lang: Languages
 }
 
-interface PresetProperties {
+interface DatabaseProperties {
     readonly name: string;
     readonly displayName: Record<Languages, string>;
-    readonly enabled: boolean
+    readonly enabled: boolean;
+    readonly prisma?: boolean;
 }

@@ -1,0 +1,8 @@
+{
+    "name": "firestore",
+    "displayName":{
+        "pt_br": "Banco de dados Firestore",
+        "en_us": "Firestore database"
+    },
+    "enabled": true
+}
