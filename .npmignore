@@ -7,3 +7,4 @@ node_modules
 *deprecated
 *development.json
 *.env.development
+/.env

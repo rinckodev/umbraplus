@@ -95,7 +95,7 @@ export default async function botApp({ language, rootname }: AppOptions){
     const paths = {
         template: {
             project: join(templatePath, "project"),
-            examples: join(templatePath, "examples", database == "none" ? "default" : database),
+            // examples: join(templatePath, "examples", database == "none" ? "default" : database),
             gitignore: join(templatePath, "gitignore.txt"),
         }
     }
