@@ -1,20 +1,14 @@
 #!/usr/bin/env node
 import { Command, Option } from "commander";
-import { checkCancel, getLastestVersion, isOutdated, readJson } from "./helpers";
-import { PackageJson } from "./@types/packageJson";
+import { checkCancel, getLastestVersion, isOutdated } from "./helpers";
+import { readPackageJSON } from "pkg-types";
 import { join } from "node:path";
-import langs from "./lang.json";
 import { style } from "@opentf/cli-styles";
-import { Signale } from "signale";
 import { textReplacer } from "@magicyan/core";
-import { botApp } from "./apps/bot";
+import botApp from "./apps/bot";
 import { intro, outro, select } from "@clack/prompts";
-
-const log = new Signale({
-    config: {
-        displayLabel: false,
-    }
-})
+import langs from "./lang.json";
+import { consola as log } from "consola"
 
 export interface AppOptions {
     language: Languages;
@@ -22,10 +16,11 @@ export interface AppOptions {
 }
 
 async function main(){
-    const packageJson = readJson<PackageJson>(join(__dirname, "../package.json"))
-    
+    const packageJson = await readPackageJSON(join(__dirname, "../package.json"));
+    const packageVersion = packageJson.version!;
+
     const program = new Command(packageJson.name)
-    .version(packageJson.version)
+    .version(packageVersion)
     .addOption(
         new Option("-l, --lang <language>", "Selecet program language!")
         .choices(["pt_br", "en_us"])
@@ -35,11 +30,11 @@ async function main(){
 
     const language: Languages = program.opts().lang || "en_us";
 
-    intro(style(`${langs.welcome[language]} 📦 $und.hex(#505050){${packageJson.version}}`))
+    intro(style(`${langs.welcome[language]} 📦 $und.hex(#505050){${packageVersion}}`))
 
     const lastVersion = await getLastestVersion();
     
-    if (lastVersion && isOutdated(packageJson.version, lastVersion)){
+    if (lastVersion && isOutdated(packageVersion, lastVersion)){
         log.warn(textReplacer(langs.outdated[language], {
             "var(version)": lastVersion
         }));

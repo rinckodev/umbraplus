@@ -1,22 +1,15 @@
 import dotenv from "dotenv";
 import { existsSync } from "node:fs";
-import { resolve } from "node:path";
-import { Signale } from "signale";
+import { consola as log } from "consola";
 import settings from "./settings.json";
 import "./constants";
 
-const developmentEnvPath = resolve(__rootname, ".env.development");
+const developmentEnvPath = rootTo(".env.development");
 
-const dev = existsSync(developmentEnvPath);
-
-const { parsed: parsedEnv } = dotenv.config({
-    path: existsSync(developmentEnvPath) 
-    ? developmentEnvPath 
-    : resolve(__rootname, ".env")
+dotenv.config({
+    path: existsSync(developmentEnvPath)
+    ? developmentEnvPath
+    : rootTo(".env")
 });
 
-const processEnv = { ...(parsedEnv as NodeJS.ProcessEnv), dev };
-
-const log = new Signale();
-
-export { log, processEnv, settings };
+export { log, settings };

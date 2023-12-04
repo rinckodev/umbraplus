@@ -1,35 +1,29 @@
 import dotenv from "dotenv";
 import { existsSync, readFileSync } from "node:fs";
-import { resolve, basename } from "node:path";
-import { Signale } from "signale";
+import { consola as log } from "consola";
 import settings from "./settings.json";
 import "./constants";
-import ck from "chalk";
-import { ServiceAccount } from "firebase-admin";
 
-const developmentEnvPath = resolve(__rootname, ".env.development");
+const developmentEnvPath = rootTo(".env.development");
 
-const dev = existsSync(developmentEnvPath);
-
-const { parsed: parsedEnv } = dotenv.config({
-    path: existsSync(developmentEnvPath) 
-    ? developmentEnvPath 
-    : resolve(__rootname, ".env")
+dotenv.config({
+    path: existsSync(developmentEnvPath)
+    ? developmentEnvPath
+    : rootTo(".env")
 });
 
-const processEnv = { ...(parsedEnv as NodeJS.ProcessEnv), dev };
+import { ServiceAccount } from "firebase-admin";
+import { basename } from "node:path";
+import ck from "chalk";
 
-const log = new Signale();
-
-const firebaseAccountPath = dev 
-? resolve(__rootname, "firebase.development.json")
-: resolve(__rootname, "firebase.json");
+const firebaseAccountPath = existsSync(developmentEnvPath)
+? rootTo("firebase.development.json") 
+: rootTo("firebase.json");
 
 if (!existsSync(firebaseAccountPath)){
     const filename = ck.yellow(`"${basename(firebaseAccountPath)}"`);
-    const directory = ck.cyan(resolve(firebaseAccountPath, ".."));
-    const text = ck.red(`The ${filename} file was not found in ${directory}`);
-    console.error(text);
+    const text = ck.red(`The ${filename} file was not found in ${__rootname}`);
+    log.error(text);
     process.exit(0);
 }
 
@@ -37,4 +31,4 @@ const firebaseAccount: ServiceAccount = JSON.parse(
     readFileSync(firebaseAccountPath, {encoding: "utf-8"})
 );
 
-export { log, processEnv, settings, firebaseAccount };
+export { log, settings, firebaseAccount };

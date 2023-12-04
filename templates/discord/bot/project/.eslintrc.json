@@ -17,6 +17,6 @@
         "semi":"warn",
         "camelcase":"warn",
         "no-duplicate-imports":"warn",
-        "no-extra-semi":"warn"
+        "no-extra-semi":"warn"  
     }
 }

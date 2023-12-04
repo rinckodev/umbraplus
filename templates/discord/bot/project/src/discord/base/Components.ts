@@ -1,45 +1,57 @@
+import { ButtonInteraction, CacheType, ChannelSelectMenuInteraction, Collection, ComponentType, MentionableSelectMenuInteraction, RoleSelectMenuInteraction, StringSelectMenuInteraction, UserSelectMenuInteraction } from "discord.js";
 import { log } from "@/settings";
 import ck from "chalk";
-import { ButtonInteraction, CacheType, ChannelSelectMenuInteraction, Collection, MentionableSelectMenuInteraction, ModalSubmitInteraction, RoleSelectMenuInteraction, StringSelectMenuInteraction, UserSelectMenuInteraction } from "discord.js";
 
-type ComponentProps<Cached extends CacheType = CacheType> = {
-    type: "Button",
-    run(interaction: ButtonInteraction<Cached>): any;
+type ComponentProps<C extends CacheType = CacheType> = {
+    type: ComponentType.Button,
+    run(interaction: ButtonInteraction<C>): void;
 } | {
-    type: "StringSelect",
-    run(interaction: StringSelectMenuInteraction<Cached>): any;
+    type: ComponentType.StringSelect,
+    run(interaction: StringSelectMenuInteraction<C>): void;
 } | {
-    type: "RoleSelect",
-    run(interaction: RoleSelectMenuInteraction<Cached>): any;
+    type: ComponentType.RoleSelect,
+    run(interaction: RoleSelectMenuInteraction<C>): void;
 } | {
-    type: "ChannelSelect",
-    run(interaction: ChannelSelectMenuInteraction<Cached>): any;
+    type: ComponentType.ChannelSelect,
+    run(interaction: ChannelSelectMenuInteraction<C>): void;
 } | {
-    type: "UserSelect",
-    run(interaction: UserSelectMenuInteraction<Cached>): any;
+    type: ComponentType.UserSelect,
+    run(interaction: UserSelectMenuInteraction<C>): void;
 } | {
-    type: "MentionableSelect",
-    run(interaction: MentionableSelectMenuInteraction<Cached>): any;
-} | {
-    type: "Modal",
-    run(interaction: ModalSubmitInteraction<Cached>): any;
+    type: ComponentType.MentionableSelect,
+    run(interaction: MentionableSelectMenuInteraction<C>): void;
 }
 
-type ComponentData<Cached extends CacheType = CacheType> = ComponentProps<Cached> & {
-    cache?: Cached,
-    customId: string,
+type CustomIdFunction = (customId: string) => boolean
+
+type ComponentStringIdentifier = {
+    customId: string;
+}
+type ComponentFunctionIdentifier = {
+    name: string;
+    customId: CustomIdFunction;
 }
 
-export class Component<Cached extends CacheType = CacheType> {
-    public static all: Collection<string, ComponentData> = new Collection();
-    public static find<T extends ComponentData["type"]>(customId: string, type: T){
-        const c =  Component.all.find(c => c.customId === customId && c.type == type);
-        return c as ComponentData & { type: T } | undefined;
+type ComponentIdentifier = ComponentStringIdentifier | ComponentFunctionIdentifier
+
+type ComponentData<C extends CacheType = CacheType> = ComponentProps<C> & {
+    cache?: C
+} & ComponentIdentifier
+
+export class Component<C extends CacheType = CacheType> {
+    private static all: Collection<string, ComponentData> = new Collection();
+    public static get<T extends ComponentType>(customId: string, type: T){
+        return Component.all.find(c => c.customId == customId && c.type == type);
     }
-    constructor(data: ComponentData<Cached>){
-        log.success(
-            ck.green(`${ck.cyan.underline(data.customId)} registered successfully!`)
-        );
-        Component.all.set(data.customId, data);
+    public static logical: Array<ComponentData & { customId: CustomIdFunction }> = [];
+    constructor(data: ComponentData<C>){
+        if (typeof data.customId === "string"){
+            Component.all.set(data.customId, data);
+            log.success(ck.green(`${ck.cyan.underline(data.customId)} component registered successfully!`));
+        } else {
+            Component.logical.push(data as any);
+            const name = (data as { name: string }).name;
+            log.success(ck.green(`${ck.cyan.underline(name)} component registered successfully!`));
+        }
     }
 }

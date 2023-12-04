@@ -1,49 +1,32 @@
+import { ApplicationCommandData, ApplicationCommandType, AutocompleteInteraction, CacheType, ChatInputCommandInteraction, Collection, MessageContextMenuCommandInteraction, UserContextMenuCommandInteraction } from "discord.js";
 import { log } from "@/settings";
 import ck from "chalk";
-import {
-    ApplicationCommandData,
-    ApplicationCommandType,
-    AutocompleteInteraction,
-    ChatInputCommandInteraction,
-    Collection, CommandInteraction,
-    MessageContextMenuCommandInteraction,
-    UserContextMenuCommandInteraction
-} from "discord.js";
 
-type C<B extends boolean, I extends CommandInteraction | AutocompleteInteraction> = 
-I extends ChatInputCommandInteraction 
-? B extends false ? ChatInputCommandInteraction<"cached"> : ChatInputCommandInteraction
-: I extends UserContextMenuCommandInteraction 
-? B extends false ? UserContextMenuCommandInteraction<"cached"> : UserContextMenuCommandInteraction
-: I extends MessageContextMenuCommandInteraction 
-? B extends false ? MessageContextMenuCommandInteraction<"cached"> : MessageContextMenuCommandInteraction
-: I extends AutocompleteInteraction 
-? B extends false ? AutocompleteInteraction<"cached"> : AutocompleteInteraction
-: never;
+type isCached<B extends boolean | undefined = undefined> = 
+B extends true ? "raw" : B extends false ? "cached" : CacheType;
 
 type CommandProps<DmPermission extends boolean> =
 {
+    name: Lowercase<string>;
     type: ApplicationCommandType.ChatInput,
-    autoComplete?(interaction: C<DmPermission, AutocompleteInteraction>): any
-    run(interaction: C<DmPermission, ChatInputCommandInteraction>): any
+    autoComplete?(interaction: AutocompleteInteraction<isCached<DmPermission>>): any
+    run(interaction: ChatInputCommandInteraction<isCached<DmPermission>>): any
 } | {
     type: ApplicationCommandType.User,
-    run(interaction: C<DmPermission, UserContextMenuCommandInteraction>): any
+    run(interaction: UserContextMenuCommandInteraction<isCached<DmPermission>>): any
 } | {
     type: ApplicationCommandType.Message,
-    run(interaction: C<DmPermission, MessageContextMenuCommandInteraction>): any
+    run(interaction: MessageContextMenuCommandInteraction<isCached<DmPermission>>): any
 }
 
 type CommandData<DmPermission extends boolean> = CommandProps<DmPermission> & ApplicationCommandData & {
-    dmPermission: DmPermission,
+    dmPermission?: DmPermission,
 }
 
 export class Command<DmPermission extends boolean = boolean> {
     public static all: Collection<string, CommandData<boolean>> = new Collection();
     constructor(public data: CommandData<DmPermission>){
-        log.success(
-            ck.green(`${ck.blue.underline(data.name)} registered successfully!`)
-        );
+        log.success(ck.green(`${ck.blue.underline(data.name)} command registered successfully!`));
         Command.all.set(data.name, data);
     }
 }

@@ -26,5 +26,11 @@
         "gitignore": "Git",
         "*.lang.json": "i18n",
         "lang.json": "i18n"
-    }
+    },
+    "json.schemas": [
+        {
+          "fileMatch": ["templates/discord/bot/databases/**/*properties.json"],
+          "url": "/.vscode/schemas/discord/bot/database/properties.schema.json"
+        }
+    ]
 }

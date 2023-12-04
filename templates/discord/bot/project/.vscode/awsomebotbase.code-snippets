@@ -74,8 +74,22 @@
 		  "    async run(interaction) {",
 		  "        ",
 		  "    },",
-		  "})"
+		  "});"
 		],
 		"description": "Create a new component"
+	},
+	"Modal": {
+		"prefix": "new.modal",
+		"body": [
+		  "new Modal({",
+		  "    customId: \"example-modal\",",
+		  "    cache: \"cached\",",
+		  "    isFromMessage: true,",
+		  "    async run(interaction) {",
+		  "        ",
+		  "    },",
+		  "});"
+		],
+		"description": "Create a new modal"
 	}
 }

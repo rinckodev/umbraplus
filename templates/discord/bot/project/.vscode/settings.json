@@ -22,5 +22,31 @@
         "gitignore": "Git",
         "*.lang.json": "i18n",
         "lang.json": "i18n"
-    }
+    },
+    "json.schemas": [
+        {
+            "url": "/.vscode/schemas/embed/object.schema.json",
+            "fileMatch": ["*embed.json"]
+        },
+        {
+            "url": "/.vscode/schemas/embed/array.schema.json",
+            "fileMatch": ["*embeds.json"]
+        },
+        {
+            "url": "/.vscode/schemas/components/button/object.schema.json",
+            "fileMatch": ["*button.json"]
+        },
+        {
+            "url": "/.vscode/schemas/components/button/array.schema.json",
+            "fileMatch": ["*buttons.json"]
+        },
+        {
+            "url": "/.vscode/schemas/components/select/object.schema.json",
+            "fileMatch": ["*select.json"]
+        },
+        {
+            "url": "/.vscode/schemas/components/select/array.schema.json",
+            "fileMatch": ["*selects.json"]
+        }
+    ],
 }

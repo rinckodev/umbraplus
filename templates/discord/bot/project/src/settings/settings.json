@@ -1,14 +1,25 @@
 {
   "colors": {
     "theme": {
-      "info": "#fde047",
-      "default": "#2F3136",
-      "success": "#22c55e",
-      "danger": "#ef4444",
-      "primary": "#3b82f6",
-      "secondary": "#4f545c",
-      "warning": "#fbbd23",
-      "magic": "#c026d3"
+      "success":    "#22c55e",
+      "danger":     "#ED4245",
+      "primary":    "#3b82f6",
+      "secondary":  "#4f545c",
+      "default":    "#2F3136",
+      "info":       "#FEE75C",
+      "warning":    "#fbbd23",
+      "magic":      "#c026d3",
+      "green":      "#57F287",
+      "fuchsia":    "#EB459E",
+      "azoxo":      "#5865F2"
+    }
+  },
+  "images":{
+    "logos": {
+      "discord": "https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0b52aa9e99b832574a53_full_logo_blurple_RGB.png"
+    },
+    "icons":{
+      "discord": "https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png"
     }
   }
 }

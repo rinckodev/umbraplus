@@ -1,0 +1,20 @@
+{
+    "description": {
+        "en-US": [
+            "## Welcome var(user) to the Awesome Bot Base",
+            "- Create commands easily",
+            "- Awsome commands, events and components handler",
+            "- Use var(lib) lib"
+        ],
+        "pt-BR": [
+            "## Seja bem vindo var(user) à Awesome Bot Base",
+            "- Crie comandos facilmente",
+            "- Incrível manipulador de comandos, eventos e components",
+            "- Usa a lib var(lib)"
+        ]
+    },
+    "footer": {
+        "en-US": "by var(github)",
+        "pt-BR": "por var(github)"
+    }
+}

@@ -1,0 +1,27 @@
+{
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "displayName": {
+        "type": "object",
+        "properties": {
+          "en_us":{
+            "type": "string"
+          },
+          "pt_br":{
+            "type": "string"
+          }
+        },
+        "required": ["en_us", "pt_br"]
+      },
+      "enabled": {
+        "type": "boolean"
+      },
+      "prisma":{
+        "type": "boolean"
+      }
+    },
+    "required": ["name", "displayName", "enabled"]
+}
