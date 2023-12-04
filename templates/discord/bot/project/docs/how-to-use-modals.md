@@ -1,6 +1,8 @@
 You can create functionality for modals in the same way as [components](./how-to-use-components.md);
 
 ```ts
+import { Modal } from "@/discord/base";
+
 new Modal({
     customId: "announcement-modal",
     cache: "cached",
@@ -20,7 +22,7 @@ new Modal({
     customId: "announcement-modal",
     cache: "cached",
     isFromMessage: true, // Modal opened from button or select menu
-    run(interaction) {
+    run(interaction) { // ModalMessageModalSubmitInteraction
         const { fields } = interaction;
         const title = fields.getTextInputValue("title-input");
 
