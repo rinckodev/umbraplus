@@ -78,7 +78,7 @@ function onAutoComplete(interaction: AutocompleteInteraction){
 function onComponent(interaction: MessageComponentInteraction){
     const component = Component.get(interaction.customId, interaction.componentType)
     ?? Component.logical.find(c => c.customId(interaction.customId));
-               
+    
     if (component) {
         component.run(interaction as any);
         return;
@@ -86,7 +86,8 @@ function onComponent(interaction: MessageComponentInteraction){
     log.warn(`Missing function to ${interaction.customId} component`);
 }
 function onModal(interaction: ModalSubmitInteraction){
-    const modal = Modal.get(interaction.customId);
+    const modal = Modal.get(interaction.customId)
+    ?? Modal.logical.find(c => c.customId(interaction.customId));
     if (modal) {
         modal.run(interaction);
         return;
