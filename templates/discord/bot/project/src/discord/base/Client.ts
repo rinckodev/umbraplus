@@ -75,16 +75,14 @@ function onAutoComplete(interaction: AutocompleteInteraction){
     if (command?.type !== ApplicationCommandType.ChatInput || !command.autoComplete) return;
     command.autoComplete(interaction as any);
 }
-async function onComponent(interaction: MessageComponentInteraction){
-    const component = Component.get(interaction.customId, interaction.componentType)
-    ?? Component.logical.find(c => c.customId(interaction.customId));
-               
+function onComponent(interaction: MessageComponentInteraction){
+    const component = Component.get(interaction.customId, interaction.componentType);
     if (component) {
         component.run(interaction as any);
         return;
     }
 }
-async function onModal(interaction: ModalSubmitInteraction){
+function onModal(interaction: ModalSubmitInteraction){
     const modal = Modal.get(interaction.customId);
     if (modal) {
         modal.run(interaction);

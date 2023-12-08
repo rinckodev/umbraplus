@@ -26,7 +26,7 @@ type ModalData<C extends CacheType = CacheType, M extends boolean = boolean> = {
 export class Modal<C extends CacheType = CacheType, M extends boolean = boolean>{
     private static all: Collection<string, ModalData> = new Collection();
     public static get(customId: string){
-        return Modal.all.get(customId);
+        return Modal.all.get(customId) || Modal.logical.find(m => m.customId(customId));
     }
     public static logical: Array<ModalData & { customId: CustomIdFunction }> = [];
     constructor(data: ModalData<C, M>){

@@ -41,7 +41,8 @@ type ComponentData<C extends CacheType = CacheType> = ComponentProps<C> & {
 export class Component<C extends CacheType = CacheType> {
     private static all: Collection<string, ComponentData> = new Collection();
     public static get<T extends ComponentType>(customId: string, type: T){
-        return Component.all.find(c => c.customId == customId && c.type == type);
+        return Component.all.find(c => c.customId == customId && c.type == type) || 
+        Component.logical.find(c => c.customId(customId) && c.type == type);
     }
     public static logical: Array<ComponentData & { customId: CustomIdFunction }> = [];
     constructor(data: ComponentData<C>){
