@@ -83,19 +83,11 @@ async function onComponent(interaction: MessageComponentInteraction){
         component.run(interaction as any);
         return;
     }
-    await sleep(3500);
-    if (!interaction.replied){
-        log.warn(`Missing function to ${interaction.customId} component`);
-    }
 }
 async function onModal(interaction: ModalSubmitInteraction){
     const modal = Modal.get(interaction.customId);
     if (modal) {
         modal.run(interaction);
         return;
-    }
-    await sleep(3500);
-    if (!interaction.replied){
-        log.warn(`Missing function to ${interaction.customId} modal`);
     }
 }
