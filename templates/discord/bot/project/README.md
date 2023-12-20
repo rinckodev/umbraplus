@@ -3,6 +3,8 @@
 
 This is the most complete bot base you've ever seen created by [@rinckodev](https://github.com/rinckodev). This project uses typescript to its advantage, using features to create complete structures that facilitate the construction of commands and systems
 
+! Node version required: 20.10 or higher 
+
 [Setup your application](docs/setup-your-discord-application.md)
 
 ## Scripts

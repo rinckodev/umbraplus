@@ -29,7 +29,7 @@
     "dotenv": "^16.3.1",
     "eslint": "^8.55.0",
     "firebase-admin": "^11.11.1",
-    "glob": "^10.3.10",
+    "fast-glob": "^3.3.2",
     "tslib": "^2.6.2",
     "typesaurus": "^7.2.0"
   }

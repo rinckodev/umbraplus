@@ -1,32 +1,35 @@
-import { ApplicationCommandData, ApplicationCommandType, AutocompleteInteraction, CacheType, ChatInputCommandInteraction, Collection, MessageContextMenuCommandInteraction, UserContextMenuCommandInteraction } from "discord.js";
+import { ApplicationCommandData, ApplicationCommandType, AutocompleteInteraction, CacheType, ChatInputCommandInteraction, Collection, ComponentType, MessageContextMenuCommandInteraction, UserContextMenuCommandInteraction } from "discord.js";
 import { log } from "@/settings";
 import ck from "chalk";
 
-type isCached<B extends boolean | undefined = undefined> = 
-B extends true ? "raw" : B extends false ? "cached" : CacheType;
+type GetCache<D> = D extends false ? "cached" : CacheType;
 
-type CommandProps<DmPermission extends boolean> =
+type CommandProps<D, Store> =
 {
     name: Lowercase<string>;
     type: ApplicationCommandType.ChatInput,
-    autoComplete?(interaction: AutocompleteInteraction<isCached<DmPermission>>): any
-    run(interaction: ChatInputCommandInteraction<isCached<DmPermission>>): any
+    autoComplete?(interaction: AutocompleteInteraction<GetCache<D>>, store: Store): any
+    run(interaction: ChatInputCommandInteraction<GetCache<D>>, store: Store): any
 } | {
     type: ApplicationCommandType.User,
-    run(interaction: UserContextMenuCommandInteraction<isCached<DmPermission>>): any
+    run(interaction: UserContextMenuCommandInteraction<GetCache<D>>, store: Store): any
 } | {
     type: ApplicationCommandType.Message,
-    run(interaction: MessageContextMenuCommandInteraction<isCached<DmPermission>>): any
+    run(interaction: MessageContextMenuCommandInteraction<GetCache<D>>, store: Store): any
 }
 
-type CommandData<DmPermission extends boolean> = CommandProps<DmPermission> & ApplicationCommandData & {
-    dmPermission?: DmPermission,
+type CommandStoreOptions = Map<any, any> | Set<any> | Collection<any, any> | Array<any>; 
+type CommandStore = Record<string, CommandStoreOptions>;
+
+type CommandData<D extends boolean, Store extends CommandStore> = CommandProps<D, Store> & ApplicationCommandData & {
+    dmPermission?: D,
+    store?: Store;
 }
 
-export class Command<DmPermission extends boolean = boolean> {
-    public static all: Collection<string, CommandData<boolean>> = new Collection();
-    constructor(public data: CommandData<DmPermission>){
+export class Command<D extends boolean, Store extends CommandStore = CommandStore> {
+    public static commands: Collection<string, CommandData<boolean, CommandStore>> = new Collection();
+    constructor(public data: CommandData<D, Store>){
         log.success(ck.green(`${ck.blue.underline(data.name)} command registered successfully!`));
-        Command.all.set(data.name, data);
+        Command.commands.set(data.name, data);
     }
 }

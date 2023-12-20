@@ -1,8 +1,8 @@
 import { ApplicationCommandType, AutocompleteInteraction, Client, ClientOptions, CommandInteraction, MessageComponentInteraction, ModalSubmitInteraction, Partials, version } from "discord.js";
-import { CustomItents, brBuilder, sleep } from "@magicyan/discord";
+import { CustomItents, brBuilder } from "@magicyan/discord";
 import { Command, Component, Event, Modal } from "./";
 import { log } from "@/settings";
-import { glob } from "glob";
+import { glob } from "fast-glob";
 import { join } from "node:path";
 import ck from "chalk";
 
@@ -57,35 +57,29 @@ async function whenReady(client: Client<true>){
     console.log();
         
     await client.application.commands.set(
-        Array.from(Command.all.values())
+        Array.from(Command.commands.values())
     )
     .then(() => log.success(ck.green("Commands registered successfully!")))
     .catch(log.error);
 }
 function onCommand(commandInteraction: CommandInteraction){
-    const command = Command.all.get(commandInteraction.commandName);
+    const command = Command.commands.get(commandInteraction.commandName);
     if (command) {
-        command.run(commandInteraction as any);
+        command.run(commandInteraction as any, command.store ?? {});
         return;
     }
     log.warn(`Missing function to ${commandInteraction.commandName} command`);
 }
 function onAutoComplete(interaction: AutocompleteInteraction){
-    const command = Command.all.get(interaction.commandName);
+    const command = Command.commands.get(interaction.commandName);
     if (command?.type !== ApplicationCommandType.ChatInput || !command.autoComplete) return;
-    command.autoComplete(interaction as any);
+    command.autoComplete(interaction as any, command.store ?? {});
 }
 function onComponent(interaction: MessageComponentInteraction){
     const component = Component.get(interaction.customId, interaction.componentType);
-    if (component) {
-        component.run(interaction as any);
-        return;
-    }
+    if (component) component.run(interaction as any);
 }
 function onModal(interaction: ModalSubmitInteraction){
     const modal = Modal.get(interaction.customId);
-    if (modal) {
-        modal.run(interaction);
-        return;
-    }
+    if (modal) modal.run(interaction);
 }

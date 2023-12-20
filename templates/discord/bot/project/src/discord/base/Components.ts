@@ -34,20 +34,20 @@ type ComponentFunctionIdentifier = {
 
 type ComponentIdentifier = ComponentStringIdentifier | ComponentFunctionIdentifier
 
-type ComponentData<C extends CacheType = CacheType> = ComponentProps<C> & {
+type ComponentData<C extends CacheType = CacheType> = ComponentProps<C> & ComponentIdentifier & {
     cache?: C
-} & ComponentIdentifier
+}
 
 export class Component<C extends CacheType = CacheType> {
-    private static all: Collection<string, ComponentData> = new Collection();
+    private static components: Collection<string, ComponentData> = new Collection();
     public static get<T extends ComponentType>(customId: string, type: T){
-        return Component.all.find(c => c.customId == customId && c.type == type) || 
+        return Component.components.find(c => c.customId == customId && c.type == type) || 
         Component.logical.find(c => c.customId(customId) && c.type == type);
     }
     public static logical: Array<ComponentData & { customId: CustomIdFunction }> = [];
     constructor(data: ComponentData<C>){
         if (typeof data.customId === "string"){
-            Component.all.set(data.customId, data);
+            Component.components.set(data.customId, data);
             log.success(ck.green(`${ck.cyan.underline(data.customId)} component registered successfully!`));
         } else {
             Component.logical.push(data as any);
