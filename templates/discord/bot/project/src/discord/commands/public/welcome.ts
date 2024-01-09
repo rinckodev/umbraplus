@@ -1,6 +1,6 @@
 import { Command } from "@/discord/base";
 import { settings } from "@/settings";
-import { brBuilder, createEmbedAuthor, createRow, hexToRgb, spaceBuilder, textReplacer } from "@magicyan/discord";
+import { brBuilder, createEmbedAuthor, createRow, hexToRgb, spaceBuilder, replaceText } from "@magicyan/discord";
 import { ApplicationCommandType, ButtonBuilder, ButtonStyle, EmbedBuilder, Locale, hyperlink } from "discord.js";
 import lang from "./welcome.lang.json";
 
@@ -27,14 +27,14 @@ new Command({
             color: hexToRgb(settings.colors.theme.success),
             description: brBuilder(
                 ...lang.description[avaliableLocales].map(
-                    text => textReplacer(text, { 
+                    text => replaceText(text, { 
                         "var(user)": user,
                         "var(lib)": libMention,
                     })
                 )
             ),
             footer: {
-                text: textReplacer(lang.footer[avaliableLocales], {
+                text: replaceText(lang.footer[avaliableLocales], {
                     "var(github)": spaceBuilder("Rincko Dev", githubProfileUrl)
                 }),
                 iconURL: githubProfileUrl+".png",

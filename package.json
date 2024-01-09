@@ -1,6 +1,6 @@
 {
   "name": "umbraplus",
-  "version": "1.0.26",
+  "version": "1.0.27",
   "description": "Umbra Plus CLI",
   "main": "dist/index.js",
   "bin": "dist/index.js",
