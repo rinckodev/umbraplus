@@ -1,8 +1,0 @@
-{
-    "name": "quickdb",
-    "displayName":{
-        "pt_br": "Banco QuickDb",
-        "en_us": "QuickDb database"
-    },
-    "enabled": true
-}
